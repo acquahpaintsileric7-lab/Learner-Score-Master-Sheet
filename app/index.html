@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Learner Score Master Sheet</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#5b4de0">
+<script id="themeinit">(function(){var K="lsms_theme";function mode(){try{return localStorage.getItem(K)||"auto"}catch(e){return"auto"}}
+function colour(m){var d=m==="dark"||(m==="auto"&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);return d?"#312e81":"#5b4de0"}
+function apply(m){var r=document.documentElement;if(m==="light"||m==="dark")r.setAttribute("data-theme",m);else r.removeAttribute("data-theme");try{localStorage.setItem(K,m)}catch(e){}var t=document.querySelector('meta[name="theme-color"]');if(t)t.setAttribute("content",colour(m))}
+apply(mode());
+document.addEventListener("click",function(e){var b=e.target&&e.target.closest&&e.target.closest("[data-theme-set]");if(b)apply(b.getAttribute("data-theme-set"))});
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){if(mode()==="auto")apply("auto")})}catch(e){}
+})();</script>
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Score Master">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<style>
+:root{--bg:#f4f2ff;--card:#fff;--tx:#1d1b3a;--mu:#5e5a85;--bd:#dcd8f5;--pr:#5b4de0;--prt:#fff;--hl:#ece9ff;--gr:#f1efff;--inp:#fbfaff;--acc1:#5b4de0;--acc2:#8b5cf6;--acc3:#ec4899;--teal:#0ea5a4;--amber:#f59e0b;--rose:#e11d48;--grad:linear-gradient(120deg,#4f46e5 0%,#8b5cf6 55%,#ec4899 100%);--btn:linear-gradient(135deg,#5b4de0,#8b5cf6);--btnt:#fff;--thead:linear-gradient(135deg,#4f46e5,#7c3aed);--zebra:#f7f5ff;--shadow:0 4px 18px rgba(91,77,224,.13);--page:linear-gradient(160deg,#eef0ff 0%,#fbefff 45%,#e6f9f4 100%);--c1:#ede9fe;--c1t:#6d28d9;--c2:#e0f2fe;--c2t:#0369a1;--c3:#ccfbf1;--c3t:#0f766e;--c4:#fef3c7;--c4t:#b45309;--c5:#fce7f3;--c5t:#be185d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1020;--card:#171a30;--tx:#e9e9ff;--mu:#a3a6cf;--bd:#2d3258;--pr:#8b9bff;--prt:#0d1030;--hl:#232a5a;--gr:#20244a;--inp:#10132b;--acc1:#6366f1;--acc2:#8b5cf6;--acc3:#ec4899;--teal:#2dd4bf;--amber:#fbbf24;--rose:#fb7185;--grad:linear-gradient(120deg,#312e81 0%,#5b21b6 55%,#9d174d 100%);--btn:linear-gradient(135deg,#7c8cff,#a78bfa);--btnt:#0d1030;--thead:linear-gradient(135deg,#3730a3,#6d28d9);--zebra:#1b1f3c;--shadow:0 4px 18px rgba(0,0,0,.45);--page:linear-gradient(160deg,#0e1020 0%,#150f2b 50%,#0b1a24 100%);--c1:#2b2466;--c1t:#c4b5fd;--c2:#10324a;--c2t:#7dd3fc;--c3:#0f3b3a;--c3t:#5eead4;--c4:#44310c;--c4t:#fcd34d;--c5:#4a1634;--c5t:#f9a8d4}}
+:root[data-theme="dark"]{--bg:#0e1020;--card:#171a30;--tx:#e9e9ff;--mu:#a3a6cf;--bd:#2d3258;--pr:#8b9bff;--prt:#0d1030;--hl:#232a5a;--gr:#20244a;--inp:#10132b;--acc1:#6366f1;--acc2:#8b5cf6;--acc3:#ec4899;--teal:#2dd4bf;--amber:#fbbf24;--rose:#fb7185;--grad:linear-gradient(120deg,#312e81 0%,#5b21b6 55%,#9d174d 100%);--btn:linear-gradient(135deg,#7c8cff,#a78bfa);--btnt:#0d1030;--thead:linear-gradient(135deg,#3730a3,#6d28d9);--zebra:#1b1f3c;--shadow:0 4px 18px rgba(0,0,0,.45);--page:linear-gradient(160deg,#0e1020 0%,#150f2b 50%,#0b1a24 100%);--c1:#2b2466;--c1t:#c4b5fd;--c2:#10324a;--c2t:#7dd3fc;--c3:#0f3b3a;--c3t:#5eead4;--c4:#44310c;--c4t:#fcd34d;--c5:#4a1634;--c5t:#f9a8d4}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 Arial,Helvetica,sans-serif}
+main{max-width:1500px;margin:0 auto;padding:14px}
+h1{font-size:20px;margin:0 0 2px}.sub{color:var(--mu);margin:0 0 12px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+label{display:block;font-size:12px;color:var(--mu);margin-bottom:3px}
+input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:5px 7px;max-width:100%;box-sizing:border-box}
+.grid input{width:100%}#cnt{font-size:13px;color:var(--mu)}
+.chips{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:4px}.chips label,.bar label{display:flex;gap:5px;align-items:center;color:var(--tx);font-size:13px;margin:0}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:7px 12px}
+button.p{background:var(--pr);color:var(--prt);border-color:var(--pr);font-weight:bold}
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}#msg{color:var(--mu);font-size:13px}
+.wrap{--z:1;overflow:auto;max-width:100%;max-height:72vh;border:1px solid var(--bd);border-radius:8px}
+table{border-collapse:separate;border-spacing:0;font-size:calc(12px*var(--z));width:max-content}
+th,td{border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:2px 3px;text-align:center;background:var(--card)}
+th{position:sticky;top:0;background:var(--pr);color:var(--prt);z-index:2;font-size:calc(11px*var(--z));padding:6px 3px}
+td.n{text-align:left;position:sticky;left:0;z-index:1}td.n input{width:17.5em}td input{font-size:1em}
+th.n{left:0;z-index:3}
+td input.s{width:3.4em;text-align:center;padding:3px 1px}
+td.g{background:var(--gr);font-weight:bold;min-width:1.8em}td.b1,td.b2,td.b3{outline-width:2px;outline-style:solid;outline-offset:-2px}td.b1{outline-color:#1a9e55}td.b2{outline-color:#e0a800}td.b3{outline-color:#d62828}td.c{background:var(--hl)}
+td.r{font-weight:bold}td.x{padding:0 4px}.x button{padding:1px 6px;color:var(--mu)}
+.sw{display:inline-block;width:12px;height:12px;border:2px solid;border-radius:3px;vertical-align:-2px;margin:0 3px 0 8px}.sw.b1{border-color:#1a9e55}.sw.b2{border-color:#e0a800}.sw.b3{border-color:#d62828}.zm{display:flex;gap:5px;align-items:center;font-size:13px}.zm button{padding:2px 9px}.zm b{min-width:40px;text-align:center}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}.asel{display:flex;gap:6px;align-items:center;font-weight:bold;font-size:13px;margin:0;color:var(--tx)}.asel select{min-width:230px;font-weight:normal}textarea{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:6px 8px;width:100%;box-sizing:border-box}details>summary{cursor:pointer}.ov td,.ov th{position:static;text-align:center;font-size:12px;padding:6px;border-bottom:1px solid var(--bd);background:transparent;color:var(--tx);border-right:0}.ov th{color:var(--mu)}.ov td.n,.ov th.n{text-align:left}.ov td.hit{cursor:pointer;background:var(--hl)}.ov td.na{color:var(--mu)}.ov{width:100%;border-collapse:collapse}.tabs button{font-weight:bold}.tabs button.on{background:var(--pr);color:var(--prt);border-color:var(--pr)}
+[hidden]{display:none!important}
+.userbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;color:var(--mu)}.auth{max-width:460px;margin:24px auto}.auth label{margin-top:8px}.auth input,.auth select{width:100%}.err{color:#d62828;font-size:13px;min-height:1em}.recovery{font:bold 22px monospace;letter-spacing:2px;padding:12px;background:var(--gr);border-radius:8px;text-align:center;margin:10px 0}
+.adm{width:100%;border-collapse:collapse;font-size:13px}.adm th,.adm td{position:static;background:transparent;color:var(--tx);border:0;border-bottom:1px solid var(--bd);padding:6px;text-align:left;font-size:13px}.adm th{color:var(--mu)}
+@media (max-width:720px){main{padding:8px}h1{font-size:18px}.card{padding:9px}.tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}.tabs button{white-space:nowrap}
+button{padding:9px 12px;min-height:40px}.grid{grid-template-columns:1fr}table{font-size:14px}td input,input,select{font-size:16px}td.n input{width:10.5em}td input.s{width:3.6em}.wrap{max-height:62vh}.bar{gap:8px}.userbar{flex-wrap:wrap}.auth{margin:12px auto}}
+.subchip{display:inline-flex;gap:3px;align-items:center;border:1px solid var(--bd);border-radius:16px;padding:2px 8px;background:var(--bg)}.subchip input.subname{border:0;background:transparent;padding:2px;font-weight:bold}.subchip button{padding:0 6px;min-height:0;border:0;background:transparent;color:var(--mu)}.subadd{display:inline-flex;gap:6px;align-items:center}
+.pw{display:flex;gap:6px}.pw input{flex:1;min-width:0}.eye{min-width:62px}.badge{background:#d62828;color:#fff;border-radius:10px;padding:0 6px;font-size:11px;margin-left:4px}.badge:empty{display:none}.toast{position:fixed;top:12px;right:12px;z-index:50;background:var(--pr);color:var(--prt);padding:12px 16px;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3);cursor:pointer;font-weight:bold;max-width:340px}
+.leg{font-size:12px;color:var(--mu);margin:8px 0 0}
+.dlg{border:1px solid var(--bd);border-radius:12px;padding:0;background:var(--card);color:var(--tx);width:min(660px,calc(100vw - 24px));max-height:calc(100vh - 40px);box-shadow:0 12px 40px rgba(0,0,0,.35)}.dlg[open]{display:flex;flex-direction:column}.dlg::backdrop{background:rgba(10,14,25,.55)}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--bd)}.dh h2{margin:0;font-size:17px}.dclose{font-size:18px;line-height:1;padding:4px 10px;min-height:0}
+.db{padding:12px 16px 16px;overflow:auto}.db h3{margin:16px 0 2px;font-size:14px}.db h3:first-child{margin-top:0}.db .sub{margin:0 0 8px}.dlg .subadd{flex-wrap:wrap}.dmsg{color:var(--mu);font-size:13px;min-height:1.2em;margin:10px 0 0}
+.df{padding:10px 16px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:8px}
+.subbtn{font-weight:bold}.subbtn span{font-weight:normal;color:var(--mu)}
+@media (max-width:720px){.dlg{width:calc(100vw - 16px);max-height:calc(100vh - 16px)}}
+
+/* ---- organised layout ---- */
+.grow{flex:1}
+.topbar{display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--pr);color:var(--prt);border-radius:12px;margin-bottom:10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font-weight:bold}.logo{font-size:20px}
+.topbar .asel{color:var(--prt);margin:0}.topbar .asel select{min-width:260px;background:var(--card);color:var(--tx);font-weight:normal}
+#sync{font-size:12px;opacity:.9}
+.umenu{position:relative}.umenu summary{list-style:none;cursor:pointer;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.18);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+.umenu summary::-webkit-details-marker{display:none}.umenu summary::after{content:" ▾"}.umenu.on summary{background:rgba(255,255,255,.35)}
+.umenu-body{position:absolute;right:0;top:calc(100% + 6px);background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:6px;min-width:170px;display:flex;flex-direction:column;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:30}
+.umenu-body button{text-align:left;border:0;background:transparent}.umenu-body button:hover{background:var(--hl)}
+.mtabs{display:flex;gap:2px;margin:0 0 12px;overflow-x:auto;border-bottom:1px solid var(--bd);align-items:center}
+.mtabs button{border:0;border-bottom:3px solid transparent;border-radius:6px 6px 0 0;background:transparent;padding:9px 14px;font-weight:bold;color:var(--mu);white-space:nowrap}
+.mtabs button:hover{background:var(--hl)}.mtabs button.on{color:var(--pr);border-bottom-color:var(--pr)}
+.mlabel{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);padding:0 10px 0 2px}.vnote{margin-left:12px;color:var(--mu);font-size:13px}
+#asBanner:not(:empty){background:var(--hl);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;margin-bottom:10px;color:var(--tx);font-size:14px}
+.shead{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:12px 14px}.shead h2{margin:0 0 4px;font-size:20px}
+.chip{display:inline-block;padding:2px 10px;border-radius:12px;background:var(--gr);font-size:12px;color:var(--mu);margin:4px 6px 0 0}
+.chip.ok{background:rgba(26,158,85,.16);color:#1a9e55;font-weight:bold}.chip.warn{background:rgba(224,168,0,.2);color:#b88700;font-weight:bold}
+.statusrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.sstat{font-size:13px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px}
+.inl{display:flex;gap:6px;align-items:center;font-size:13px;margin:0;color:var(--tx)}
+details.tools>summary,details.fold>summary,details.help>summary{cursor:pointer;font-weight:bold;list-style:none}
+details.tools>summary::-webkit-details-marker,details.fold>summary::-webkit-details-marker,details.help>summary::-webkit-details-marker{display:none}
+details.tools>summary::before,details.fold>summary::before,details.help>summary::before{content:"▸ ";color:var(--mu)}
+details[open].tools>summary::before,details[open].fold>summary::before,details[open].help>summary::before{content:"▾ "}
+details.tools>summary .sub,details.fold>summary .sub{font-weight:normal;margin:0}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:12px}.tgrid h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu)}
+details.help{margin:8px 0 14px;font-size:13px;color:var(--mu)}details.help .leg{margin:8px 0 0}
+.wrap{margin-bottom:8px}
+.viewbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:0 0 12px;position:relative}
+.vsep{width:1px;height:22px;background:var(--bd)}
+.pop{position:relative}.pop>summary{list-style:none;cursor:pointer;border:1px solid var(--bd);border-radius:6px;padding:7px 12px;background:var(--card);user-select:none}
+.pop>summary::-webkit-details-marker{display:none}.pop>summary::after{content:" ▾";color:var(--mu)}
+.pop>summary:hover{background:var(--hl)}.pop[open]>summary{background:var(--hl);border-color:var(--pr)}
+.pop>summary.act{border-color:var(--pr);color:var(--pr);font-weight:bold}.pop>summary.act::before{content:"● ";font-size:9px}
+.pop-body{position:absolute;left:0;top:calc(100% + 6px);z-index:15;min-width:290px;max-width:calc(100vw - 32px);background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.pop.right .pop-body{left:auto;right:0;min-width:340px}
+.pop-body h4{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu)}
+.pop-body .sub{margin:4px 0 8px}.prow{display:flex;gap:10px;align-items:center;margin:6px 0;flex-wrap:wrap}.pop-body .grid{grid-template-columns:1fr}
+button.danger{color:#d62828;border-color:#d62828}
+.fchip{display:inline-flex;gap:2px;align-items:center;background:var(--hl);border:1px solid var(--bd);border-radius:14px;padding:2px 4px 2px 10px;font-size:12px}.fchip button{border:0;background:transparent;padding:0 6px;font-size:16px;line-height:1;color:var(--mu)}
+@media (max-width:720px){.pop{position:static}.pop-body,.pop.right .pop-body{left:0;right:0;min-width:0;max-width:none}.viewbar .vsep{display:none}}
+@media (max-width:720px){.brandname{display:none}.topbar{gap:8px}.topbar .asel{flex:1;order:2;min-width:0}.topbar .asel select{min-width:0;width:100%}.topbar .grow{display:none}#sync{order:4;width:100%}.umenu{order:3}.umenu summary{max-width:130px}.shead{flex-direction:column;align-items:flex-start}.toolbar .grow{display:none}.mtabs button{padding:9px 10px}}
+
+/* ---- colour themes ---- */
+html{color-scheme:light}:root[data-theme="dark"]{color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark}}
+body{background:var(--page);background-attachment:fixed;min-height:100vh}
+.card{box-shadow:var(--shadow)}
+h1{color:var(--pr);background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+input,select,textarea{background:var(--inp)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc2);outline-offset:0;border-color:var(--acc2)}
+button:hover{background:var(--hl)}
+button.p{background:var(--btn);color:var(--btnt);border:0;box-shadow:0 2px 8px rgba(91,77,224,.35)}button.p:hover{background:var(--btn);filter:brightness(1.08)}
+.topbar{background:var(--grad);color:#fff;box-shadow:var(--shadow)}.topbar .asel{color:#fff}.topbar .asel select{background:var(--card);color:var(--tx)}
+.umenu summary{background:rgba(255,255,255,.22)}
+.themesw{display:inline-flex;gap:2px;padding:2px;border-radius:10px;background:rgba(255,255,255,.2)}
+.themesw button{border:0;background:transparent;color:#fff;padding:5px 9px;border-radius:8px;font-size:12px;min-height:0;box-shadow:none}
+.themesw button:hover{background:rgba(255,255,255,.28)}
+html[data-theme="light"] .themesw [data-theme-set="light"],html[data-theme="dark"] .themesw [data-theme-set="dark"],html:not([data-theme]) .themesw [data-theme-set="auto"]{background:#fff;color:#4f46e5;font-weight:bold}
+.auththeme{text-align:center;margin:6px 0 18px}.auththeme .themesw{background:var(--hl)}.auththeme .themesw button{color:var(--tx)}
+html[data-theme="light"] .auththeme [data-theme-set="light"],html[data-theme="dark"] .auththeme [data-theme-set="dark"],html:not([data-theme]) .auththeme [data-theme-set="auto"]{background:var(--card);color:var(--pr)}
+.auth{border-top:6px solid var(--acc2)}
+th{background:var(--thead);color:#fff}
+.wrap tbody tr:nth-child(even) td{background:var(--zebra)}
+.wrap tbody tr:nth-child(even) td.g,.wrap tbody td.g{background:var(--gr)}
+.wrap tbody tr:nth-child(even) td.c,.wrap tbody td.c{background:var(--hl)}
+.wrap tfoot td{background:var(--hl);font-weight:bold}
+td.r{color:var(--pr)}
+.shead{border-left:6px solid var(--acc2)}.toolbar{border-left:6px solid var(--teal)}
+details.fold,details.tools{border-left:6px solid var(--amber)}
+.chip{background:var(--c1);color:var(--c1t)}
+.shead .chip:nth-child(2){background:var(--c2);color:var(--c2t)}.shead .chip:nth-child(3){background:var(--c3);color:var(--c3t)}.shead .chip:nth-child(4){background:var(--c4);color:var(--c4t)}.shead .chip:nth-child(5){background:var(--c5);color:var(--c5t)}
+.chip.ok{background:rgba(16,185,129,.18);color:#0f9d6e}.chip.warn{background:var(--c4);color:var(--c4t)}
+.mtabs button.on{color:var(--pr);border-bottom-color:var(--acc2)}.mlabel{color:var(--acc3)}
+.pop[open]>summary{border-color:var(--acc2)}.pop>summary.act{border-color:var(--acc3);color:var(--acc3)}
+.fchip{background:var(--c5);color:var(--c5t);border-color:transparent}.fchip button{color:var(--c5t)}
+#asBanner:not(:empty){background:var(--c2);color:var(--c2t);border-color:transparent}
+.badge{background:var(--rose)}.toast{background:var(--grad);color:#fff}
+.dh{background:var(--hl)}.subchip{background:var(--c1);border-color:transparent}
+.adm th{color:var(--acc1)}
+@media (max-width:720px){.themesw .tl{display:none}.themesw button{padding:5px 8px}}
+</style></head><body><main>
+<div id="authPane"></div>
+<div id="shell" hidden>
+<header class="topbar">
+<div class="brand"><span class="logo">▦</span><span class="brandname">Learner Score Master Sheet</span></div>
+<label class="asel" id="aselWrap">Sheet <select id="assessSel"></select></label>
+<span class="grow"></span><span id="sync"></span><span class="themesw" title="Appearance"><button data-theme-set="light"><span class="ti">☀</span><span class="tl"> Light</span></button><button data-theme-set="dark"><span class="ti">☾</span><span class="tl"> Dark</span></button><button data-theme-set="auto"><span class="ti">◐</span><span class="tl"> Auto</span></button></span>
+<details class="umenu" id="umenu"><summary><span id="who"></span></summary><div class="umenu-body"><button id="m_acct" data-page="acct">My account</button><button id="signout">Sign out</button></div></details>
+</header>
+<nav class="mtabs" id="tabs" hidden></nav>
+<div id="asBanner"></div>
+<div id="assist"></div>
+<div id="paneMock" hidden>
+<div class="toolbar card">
+<button class="p" id="pdf">Download PDF</button><button id="add">+ Add row</button><button id="add10">+ Add 10 rows</button>
+<span class="grow"></span><span id="msg"></span><span id="cnt"></span>
+</div>
+<div class="viewbar">
+<label class="inl">Sort by <select id="sortBy"></select></label>
+<label class="inl"><input type="checkbox" id="live"> Live sorting</label>
+<span class="vsep"></span>
+<details class="pop"><summary id="fbtn">Filter</summary><div class="pop-body">
+<h4>Show only learners whose…</h4>
+<div class="prow"><select id="fSub"></select></div>
+<div class="prow"><label class="inl">is between <input id="fMin" type="number" min="0" style="width:72px"></label><label class="inl">and <input id="fMax" type="number" min="0" style="width:72px"></label></div>
+<p class="sub">Leave a box empty for no limit.</p>
+<div class="prow"><button id="fClr">Clear filter</button></div></div></details>
+<button id="subBtn" class="subbtn" data-open="dlg" title="Choose which subjects are shown and which electives count">⚙ Subjects <span id="subsum"></span></button>
+<details class="pop"><summary>Text and colours</summary><div class="pop-body">
+<h4>Text size</h4><div class="prow"><span class="zm">Screen text <button id="zsm">−</button><b id="zsv"></b><button id="zsp">+</button></span></div><div class="prow"><span class="zm">PDF text <button id="zpm">−</button><b id="zpv"></b><button id="zpp">+</button></span></div>
+<h4>Colours</h4><div class="prow"><label class="inl"><input type="checkbox" id="col"> Colour-code scores</label></div><div class="prow"><select id="cmode"><option value="learner">Per learner: own best / average / weakest subjects</option><option value="fixed">Fixed score bands (70+ / 50–69 / below 50)</option></select></div><div id="lgd" style="font-size:12px;color:var(--mu);margin-top:4px"></div></div></details>
+<details class="pop right"><summary>More</summary><div class="pop-body">
+<h4>Sheet details</h4><div class="grid"><div><label>School</label><input id="school"></div><div><label>Exam title</label><input id="exam"></div><div><label>Class / term / date</label><input id="term"></div></div>
+<h4 style="margin-top:14px">Start over</h4><button class="danger" id="clr">Clear all learners</button><p class="sub" style="margin-top:6px">Removes every learner and score from this sheet.</p></div></details>
+<span id="fchip" class="fchip" hidden><span id="fchiptxt"></span><button id="fchipx" aria-label="Clear filter">×</button></span>
+</div>
+<dialog id="dlg" class="dlg"><div class="dh"><h2>Subjects</h2><button class="dclose" data-close aria-label="Close">×</button></div>
+<div class="db">
+<h3>Subjects shown</h3><p class="sub">Untick a subject to hide its column. Hidden subjects still count in the raw score and aggregate.</p>
+<div class="chips" id="shw"></div>
+<h3>Electives that can count</h3><p class="sub">The best 2 of the ticked electives are added to the 4 core subjects.</p>
+<div class="chips" id="elig"></div></div>
+<div class="df"><button class="p" data-close>Done</button></div></dialog>
+<div class="wrap" id="wrap"><table><thead id="th"></thead><tbody id="tb"></tbody><tfoot id="tf"></tfoot></table></div>
+<details class="help"><summary>How this sheet works</summary><p class="leg">Leave a score empty for an absent learner (grade 9). Shaded boxes are the 2 best electives that count. Colour outlines (green / yellow / red) are worked out for each learner separately: a learner's strongest third of subjects is green, the weakest third red, and the rest yellow. Choose "Fixed score bands" in the colour box to use 70+ / 50–69 / below 50 instead. Grades: 90+ =1, 80–89 =2, 70–79 =3, 60–69 =4, 55–59 =5, 50–54 =6, 40–49 =7, 35–39 =8, below 35 =9. Default order: lowest aggregate first; equal aggregates are separated by higher raw score. The list re-orders about a second after you stop typing. Learners with a name but no scores stay at the bottom. Data saves automatically on this computer.</p></details>
+</div>
+<div id="paneCt" hidden>
+<div class="toolbar card">
+<button class="p" id="ct_pdf">Download PDF</button><button id="ct_add">+ Add row</button><button id="ct_add10">+ Add 10 rows</button>
+<span class="grow"></span><span id="ct_msg"></span><span id="ct_cnt"></span>
+</div>
+<div class="viewbar">
+<label class="inl">Sort by <select id="ct_sortBy"></select></label>
+<label class="inl"><input type="checkbox" id="ct_live"> Live sorting</label>
+<span class="vsep"></span>
+<details class="pop"><summary id="ct_fbtn">Filter</summary><div class="pop-body">
+<h4>Show only learners whose…</h4>
+<div class="prow"><select id="ct_fSub"></select></div>
+<div class="prow"><label class="inl">is between <input id="ct_fMin" type="number" min="0" style="width:72px"></label><label class="inl">and <input id="ct_fMax" type="number" min="0" style="width:72px"></label></div>
+<p class="sub">Leave a box empty for no limit.</p>
+<div class="prow"><button id="ct_fClr">Clear filter</button></div></div></details>
+<button id="ct_subBtn" class="subbtn" data-open="ct_dlg" title="Rename, add, remove, reorder or untick subjects">⚙ Subjects <span id="ct_subsum"></span></button>
+<details class="pop"><summary>Text and colours</summary><div class="pop-body">
+<h4>Text size</h4><div class="prow"><span class="zm">Screen text <button id="ct_zsm">−</button><b id="ct_zsv"></b><button id="ct_zsp">+</button></span></div><div class="prow"><span class="zm">PDF text <button id="ct_zpm">−</button><b id="ct_zpv"></b><button id="ct_zpp">+</button></span></div>
+<h4>Colours</h4><div class="prow"><label class="inl"><input type="checkbox" id="ct_col"> Colour-code scores</label></div><div class="prow"><select id="ct_cmode"><option value="learner">Per learner: own best / average / weakest subjects</option><option value="fixed">Fixed bands (70% and above / 50–69% / below 50%)</option></select></div><div id="ct_lgd" style="font-size:12px;color:var(--mu);margin-top:4px"></div></div></details>
+<details class="pop right"><summary>More</summary><div class="pop-body">
+<h4>Sheet details</h4><div class="grid">
+<div><label>School</label><input id="ct_school"></div>
+<div><label>Class</label><input id="ct_cls" placeholder="e.g. 7 PRIMROSE"></div>
+<div><label>Test title</label><input id="ct_title"></div>
+<div><label>Term / year</label><input id="ct_term"></div>
+<div><label>Class teacher</label><input id="ct_teacher"></div>
+<div><label>Scores are out of</label><input id="ct_max" type="number" min="1" style="width:100%"></div></div>
+<h4 style="margin-top:14px">Start over</h4><button class="danger" id="ct_clr">Clear all learners</button><p class="sub" style="margin-top:6px">Removes every learner and score from this sheet.</p></div></details>
+<span id="ct_fchip" class="fchip" hidden><span id="ct_fchiptxt"></span><button id="ct_fchipx" aria-label="Clear filter">×</button></span>
+</div>
+<dialog id="ct_dlg" class="dlg"><div class="dh"><h2>Subjects</h2><button class="dclose" data-close aria-label="Close">×</button></div>
+<div class="db"><p class="sub">The tick includes a subject in the total (untick one that was not tested). Rename, move, remove or add subjects as needed.</p>
+<div class="chips" id="ct_shw"></div><p class="dmsg" id="ct_dmsg"></p></div>
+<div class="df"><button class="p" data-close>Done</button></div></dialog>
+<div class="wrap" id="ct_wrap"><table><thead id="ct_th"></thead><tbody id="ct_tb"></tbody><tfoot id="ct_tf"></tfoot></table></div>
+<details class="help"><summary>How this sheet works</summary><p class="leg">Leave a score empty for an absent learner (counts as 0). TOTAL = sum of the included subjects. POSITION = rank by total (equal totals share a position). Colour outlines are worked out for each learner separately: the strongest third of a learner's subjects is green, the weakest third red, the rest yellow – or choose fixed bands. Decimals such as 20.5 are allowed. The list re-orders about a second after you stop typing. Data saves automatically on this computer.</p></details>
+</div>
+<div id="paneAdmin" hidden></div>
+<div id="paneAcct" hidden></div>
+<div id="paneAssess" hidden></div>
+<div id="paneOverview" hidden></div>
+<div id="paneNotes" hidden></div>
+<div id="paneMaster" hidden></div>
+</div>
+<div id="toast" class="toast" hidden></div>
+<script>
+window.DS=window.DS||{get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const SUB=["ENG","MATH","SCI.","SOC. STUD.","RME","COMP","FRE","C. ARTS","TWI","C. TECH"];
+let KEY="";let nid=1;
+const blank=()=>({id:nid++,n:"",s:Array(10).fill(null)});
+const mockDefaults=()=>({school:"SANTA MARIEL ICAL CLASS SCHOOL",exam:"AGGREGATE SCORE",term:"",elig:[1,1,1,0,1,1],live:true,rows:[]});
+let S=mockDefaults();
+function mockLoad(key,prof){
+ KEY=key;S=mockDefaults();if(prof&&prof.school)S.school=prof.school;
+ try{const t=window.DS.get(KEY);if(t){const o=JSON.parse(t);if(o&&o.rows)S=o}}catch(e){}
+ if(/BECE MOCK RESULTS/i.test(S.exam||""))S.exam="AGGREGATE SCORE";
+ if(prof&&prof.lock){if(prof.school)S.school=prof.school;if(prof.title)S.exam=String(prof.title).toUpperCase();if(prof.term)S.term=prof.term}S.lock=!!(prof&&prof.lock);
+ S.zs=S.zs??1;S.zp=S.zp??1;S.col=S.col??true;S.cmode=S.cmode??"learner";if(S.cmode==="pupil")S.cmode="learner";S.sortBy=S.sortBy??"agg";S.fSub=S.fSub??"all";S.fMin=S.fMin??null;S.fMax=S.fMax??null;if(!S.show)S.show=Array(10).fill(1);
+ nid=1;if(!S.rows.length)S.rows=[blank(),blank(),blank(),blank(),blank()];
+ nid=Math.max(nid,...S.rows.map(r=>(r.id||0)+1));S.rows.forEach(r=>{if(!r.id)r.id=nid++});
+ build();
+}
+window.mockLoad=mockLoad;
+const $=id=>document.getElementById(id);
+const grade=s=>s==null?9:s>=90?1:s>=80?2:s>=70?3:s>=60?4:s>=55?5:s>=50?6:s>=40?7:s>=35?8:9;
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const active=r=>r.n.trim()!==""||r.s.some(v=>v!=null),ranked=r=>r.s.some(v=>v!=null);
+const bc=v=>v==null?"":v>=70?"b1":v>=50?"b2":"b3";
+function bands(s){
+ if(S.cmode==="fixed")return s.map(bc);
+ const v=s.filter(x=>x!=null);if(!v.length)return s.map(()=>"");
+ const mn=Math.min(...v),mx=Math.max(...v);
+ return s.map(x=>x==null?"":mx===mn?"b2":(t=>t>=2/3?"b1":t<=1/3?"b3":"b2")((x-mn)/(mx-mn)))}
+const setBand=(td,b)=>{td.classList.remove("b1","b2","b3");if(b)td.classList.add(b)};
+const vis=()=>SUB.map((_,i)=>i).filter(i=>S.show[i]);
+const filtering=()=>S.fSub!=="all"&&(S.fMin!=null||S.fMax!=null);
+const sortLabel=k=>k==="agg"?"AGGREGATE":k==="raw"?"RAW SCORE":k==="name"?"NAME (A–Z)":SUB[k]+" SCORE";
+const fLabel=k=>k==="raw"?"RAW SCORE":k==="agg"?"AGGREGATE":SUB[k];
+function calc(r){
+ const s=r.s,core=s.slice(0,4);let el=[];
+ for(let i=4;i<10;i++)if(S.elig[i-4])el.push({i,v:s[i]==null?0:s[i]});
+ el.sort((a,b)=>b.v-a.v||a.i-b.i);const top=el.slice(0,2);
+ const raw=core.reduce((a,v)=>a+(v||0),0)+top.reduce((a,t)=>a+t.v,0);
+ let gs=core.map(grade).concat(top.map(t=>grade(t.v)));while(gs.length<6)gs.push(9);
+ return{raw,agg:gs.reduce((a,b)=>a+b,0),ones:gs.filter(g=>g===1).length,cnt:top.map(t=>t.i)};
+}
+function passes(x){if(!filtering())return true;
+ const v=S.fSub==="raw"?x.c.raw:S.fSub==="agg"?x.c.agg:(x.r.s[S.fSub]==null?0:x.r.s[S.fSub]);
+ return (S.fMin==null||v>=S.fMin)&&(S.fMax==null||v<=S.fMax)}
+function cmp(k){const rk=(x,y)=>ranked(y.r)-ranked(x.r);
+ if(k==="name")return (x,y)=>(!x.r.n.trim()-!y.r.n.trim())||x.r.n.localeCompare(y.r.n)||x.i-y.i;
+ if(k==="raw")return (x,y)=>rk(x,y)||y.c.raw-x.c.raw||x.c.agg-y.c.agg||x.i-y.i;
+ if(typeof k==="number")return (x,y)=>rk(x,y)||((y.r.s[k]??-1)-(x.r.s[k]??-1))||x.c.agg-y.c.agg||x.i-y.i;
+ return (x,y)=>rk(x,y)||(x.pos-y.pos)||x.i-y.i}
+function stats(){
+ const rows=S.rows.map((r,i)=>({r,i,c:calc(r),pos:null}));const a=rows.filter(x=>active(x.r)),rk=a.filter(x=>ranked(x.r));
+ rk.forEach(x=>x.pos=1+rk.filter(y=>y.c.agg<x.c.agg||(y.c.agg===x.c.agg&&y.c.raw>x.c.raw)).length);
+ const n=a.length,tot=SUB.map((_,c)=>a.reduce((s,x)=>s+(x.r.s[c]||0),0)),avg=tot.map(t=>n?Math.round(t/n):null);
+ const tr=a.reduce((s,x)=>s+x.c.raw,0),ta=a.reduce((s,x)=>s+x.c.agg,0);
+ const sorted=a.filter(passes).sort(cmp(S.sortBy));
+ const view=S.live?[...sorted,...(filtering()?[]:rows.filter(x=>!active(x.r)))]:(filtering()?rows.filter(x=>active(x.r)&&passes(x)):rows);
+ return{rows,a,view,sorted,n,tot,avg,tr,avgRaw:n?Math.round(tr/n):null,avgAgg:n?Math.round(ta/n):null};
+}
+function save(){if(window.viewOnly)return;try{window.DS.set(KEY,JSON.stringify(S))}catch(e){}}
+function lockUI(){const ro=!!window.viewOnly;
+ $("tb").querySelectorAll("input,button").forEach(e=>e.disabled=ro);
+ ["school","exam","term"].forEach(k=>$(k).disabled=ro||S.lock);
+ $("elig").querySelectorAll("input").forEach(e=>e.disabled=ro);
+ ["add","add10","clr"].forEach(k=>$(k).style.display=ro?"none":"")}
+function controls(){
+ if(!$("sortBy").children.length){
+  $("sortBy").innerHTML=`<option value="agg">Aggregate (best → last)</option><option value="raw">Raw score (high → low)</option><option value="name">Name (A–Z)</option>`+SUB.map((n,i)=>`<option value="${i}">${n} score (high → low)</option>`).join("");
+  $("fSub").innerHTML=`<option value="all">No filter</option><option value="agg">Aggregate</option><option value="raw">Raw score</option>`+SUB.map((n,i)=>`<option value="${i}">${n} score</option>`).join("");
+  $("shw").innerHTML=SUB.map((n,i)=>`<label><input type="checkbox" data-s="${i}">${n}</label>`).join("");
+  $("elig").innerHTML=SUB.slice(4).map((n,i)=>`<label><input type="checkbox" data-e="${i}">${n}</label>`).join("")}
+ $("sortBy").value=String(S.sortBy);$("fSub").value=String(S.fSub);
+ if(document.activeElement!==$("fMin"))$("fMin").value=S.fMin==null?"":S.fMin;
+ if(document.activeElement!==$("fMax"))$("fMax").value=S.fMax==null?"":S.fMax;
+ $("shw").querySelectorAll("input").forEach(c=>c.checked=!!S.show[+c.dataset.s]);
+ $("elig").querySelectorAll("input").forEach(c=>c.checked=!!S.elig[+c.dataset.e]);
+ fstate();
+}
+function fstate(){const on=filtering(),b=$("fbtn"),ch=$("fchip");if(b)b.classList.toggle("act",on);
+ if(ch){ch.hidden=!on;$("fchiptxt").textContent=on?`${fLabel(S.fSub)}: ${S.fMin==null?"any":S.fMin} to ${S.fMax==null?"any":S.fMax}`:""}}
+function build(focusSel){
+ const ae=document.activeElement,keep=ae&&ae.dataset&&(ae.dataset.n!=null?`[data-n="${ae.dataset.n}"]`:ae.dataset.c!=null?`[data-r="${ae.dataset.r}"][data-c="${ae.dataset.c}"]`:null);
+ $("school").value=S.school;$("exam").value=S.exam;$("term").value=S.term;$("live").checked=!!S.live;$("col").checked=!!S.col;$("lgd").style.visibility=S.col?"visible":"hidden";$("cmode").value=S.cmode;$("cmode").style.display=S.col?"":"none";$("lgd").innerHTML=S.cmode==="fixed"?'<i class="sw b1"></i>70 and above<i class="sw b2"></i>50–69<i class="sw b3"></i>below 50':'<i class="sw b1"></i>learner\'s best subjects<i class="sw b2"></i>average<i class="sw b3"></i>weakest subjects';$("wrap").style.setProperty("--z",S.zs);$("zsv").textContent=Math.round(S.zs*100)+"%";$("zpv").textContent=Math.round(S.zp*100)+"%";controls();
+ const V=vis();
+ $("th").innerHTML="<tr><th>#</th><th class='n'>NAMES</th>"+V.map(c=>`<th>${SUB[c]}</th><th>G</th>`).join("")+"<th>RAW</th><th>AGG</th><th>1'S</th><th>POS</th><th></th></tr>";
+ const st=stats();
+ $("tb").innerHTML=st.view.map((x,k)=>`<tr data-row="${x.i}"><td>${k+1}</td><td class="n"><input data-n="${x.i}" value="${esc(x.r.n)}"></td>`+
+  V.map(c=>{const v=x.r.s[c];return `<td data-t="${c}"><input class="s" type="number" min="0" max="100" data-r="${x.i}" data-c="${c}" value="${v==null?"":v}"></td><td class="g" data-g="${c}"></td>`}).join("")+
+  `<td class="r" data-k="raw"></td><td class="r" data-k="agg"></td><td data-k="ones"></td><td class="r" data-k="pos"></td><td class="x"><button data-d="${x.i}" title="Delete row">×</button></td></tr>`).join("");
+ refresh();lockUI();
+ const t=focusSel||keep;if(t){const el=$("tb").querySelector(t);if(el)el.focus()}
+}
+function refresh(){
+ const st=stats(),V=vis();
+ st.rows.forEach(x=>{const tr=$("tb").querySelector(`tr[data-row="${x.i}"]`);if(!tr)return;const on=active(x.r),bs=bands(x.r.s);
+  tr.querySelectorAll("[data-t]").forEach(td=>{const c=+td.dataset.t;td.classList.toggle("c",on&&x.c.cnt.includes(c));setBand(td,S.col&&on?bs[c]:"")});
+  tr.querySelectorAll("[data-g]").forEach(td=>{const c=+td.dataset.g;td.textContent=on?grade(x.r.s[c]):"";setBand(td,S.col&&on?bs[c]:"")});
+  const set=(k,v)=>tr.querySelector(`[data-k=${k}]`).textContent=on?v:"";
+  set("raw",x.c.raw);set("agg",x.c.agg);set("ones",x.c.ones);set("pos",x.pos==null?"":x.pos);});
+ $("subsum").textContent=`· ${V.length} of ${SUB.length} shown`;
+ $("cnt").textContent=filtering()?`Showing ${st.sorted.length} of ${st.n} learners`:`${st.n} learner${st.n===1?"":"s"}`;
+ $("tf").innerHTML=`<tr><td></td><td class="n"><b>SUBJECT TOTAL</b></td>${V.map(c=>`<td>${st.tot[c]}</td><td></td>`).join("")}<td>${st.tr}</td><td colspan=4></td></tr>`+
+ `<tr><td></td><td class="n"><b>CLASS AVERAGE</b></td>${V.map(c=>`<td>${st.avg[c]==null?"":st.avg[c]}</td><td class="g">${st.avg[c]==null?"":grade(st.avg[c])}</td>`).join("")}<td>${st.avgRaw??""}</td><td>${st.avgAgg??""}</td><td colspan=3></td></tr>`;
+ save();
+}
+let tmr;const later=()=>{clearTimeout(tmr);tmr=setTimeout(()=>{if(S.live||filtering())build()},900)};
+const msg=t=>$("msg").textContent=t;
+["school","exam","term"].forEach(k=>$(k).addEventListener("input",e=>{S[k]=e.target.value;save()}));
+$("elig").addEventListener("change",e=>{S.elig[+e.target.dataset.e]=e.target.checked?1:0;build()});
+$("shw").addEventListener("change",e=>{S.show[+e.target.dataset.s]=e.target.checked?1:0;if(!S.show.some(v=>v)){S.show[+e.target.dataset.s]=1}build()});
+$("live").addEventListener("change",e=>{S.live=e.target.checked;build()});
+$("sortBy").addEventListener("change",e=>{const v=e.target.value;S.sortBy=/^\d$/.test(v)?+v:v;build()});
+$("fSub").addEventListener("change",e=>{const v=e.target.value;S.fSub=/^\d$/.test(v)?+v:v;build()});
+["fMin","fMax"].forEach(id=>$(id).addEventListener("input",e=>{const v=e.target.value;S[id]=v===""?null:+v;build()}));
+const zc=(k,d,lo,hi)=>{S[k]=Math.round(Math.min(hi,Math.max(lo,S[k]+d))*10)/10;build()};
+$("zsm").onclick=()=>zc("zs",-.1,.7,1.8);$("zsp").onclick=()=>zc("zs",.1,.7,1.8);
+$("zpm").onclick=()=>zc("zp",-.1,.7,1.4);$("zpp").onclick=()=>zc("zp",.1,.7,1.4);
+$("col").addEventListener("change",e=>{S.col=e.target.checked;build()});
+$("cmode").addEventListener("change",e=>{S.cmode=e.target.value;build()});
+$("fClr").onclick=()=>{S.fSub="all";S.fMin=null;S.fMax=null;build()};
+$("fchipx").onclick=()=>$("fClr").onclick();
+$("tb").addEventListener("input",e=>{const t=e.target;
+ if(t.dataset.n!=null)S.rows[+t.dataset.n].n=t.value;
+ else if(t.dataset.c!=null){const v=t.value===""?null:Math.max(0,Math.min(100,Math.round(+t.value)));S.rows[+t.dataset.r].s[+t.dataset.c]=v}
+ refresh();later()});
+$("tb").addEventListener("click",e=>{const d=e.target.dataset.d;if(d!=null){S.rows.splice(+d,1);if(!S.rows.length)S.rows.push(blank());build()}});
+$("add").onclick=()=>{S.rows.push(blank());build(`[data-n="${S.rows.length-1}"]`)};
+$("add10").onclick=()=>{for(let i=0;i<10;i++)S.rows.push(blank());build(`[data-n="${S.rows.length-10}"]`)};
+window.mockImportNames=function(list){if(window.viewOnly)return 0;
+ const seen=new Set(S.rows.map(r=>r.n.trim().toUpperCase()).filter(Boolean)),names=[];
+ for(const x of list){const n=String(x).trim();if(n&&!seen.has(n.toUpperCase())){seen.add(n.toUpperCase());names.push(n)}}
+ let i=0;for(const r of S.rows){if(i>=names.length)break;if(!active(r))r.n=names[i++]}
+ for(;i<names.length;i++){const b=blank();b.n=names[i];S.rows.push(b)}
+ build();return names.length};
+$("tb").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const t=e.target;if(t.dataset.c==null&&t.dataset.n==null)return;e.preventDefault();
+ const tr=t.closest("tr"),nx=tr&&tr.nextElementSibling;if(!nx)return;const el=nx.querySelector(t.dataset.c!=null?`input[data-c="${t.dataset.c}"]`:"input[data-n]");if(el){el.focus();if(el.select)el.select()}});
+let armed=false;
+$("clr").onclick=()=>{if(!armed){armed=true;$("clr").textContent="Click again to erase all learners";setTimeout(()=>{armed=false;$("clr").textContent="Clear all"},3500);return}
+ armed=false;$("clr").textContent="Clear all";S.rows=[blank(),blank(),blank(),blank(),blank()];build();msg("All learners cleared.")};
+
+function viewNote(){const p=[];
+ if(S.sortBy!=="agg")p.push("SORTED BY "+sortLabel(S.sortBy));
+ if(filtering())p.push(`FILTER: ${fLabel(S.fSub)} FROM ${S.fMin??0} TO ${S.fMax??"MAX"}`);
+ if(vis().length<10)p.push("SUBJECTS SHOWN: "+vis().map(c=>SUB[c]).join(", "));
+ p.length;return p.length?"VIEW: "+p.join(" | ")+". POS. IS THE POSITION IN THE WHOLE CLASS.":""}
+const colNote=()=>!S.col?"":S.cmode==="fixed"?"COLOUR OUTLINES: GREEN = 70 AND ABOVE, YELLOW = 50-69, RED = BELOW 50.":"COLOUR OUTLINES (PER LEARNER): GREEN = THE LEARNER'S STRONGEST SUBJECTS, YELLOW = AVERAGE, RED = THE LEARNER'S WEAKEST SUBJECTS."
+function printHTML(st){
+ const V=vis(),names=SUB.slice(4).filter((_,i)=>S.elig[i]).join(", "),vn=viewNote(),z=S.zp,cn=colNote();
+ const head="<tr><th>S/N</th><th>NAMES</th>"+V.map(c=>`<th>${SUB[c]}</th><th>G</th>`).join("")+"<th>RAW SCORE</th><th>AGG.</th><th>1'S</th><th>POS.</th></tr>";
+ const body=st.sorted.map((x,k)=>{const bs=bands(x.r.s);return `<tr><td>${k+1}</td><td class="n">${esc(x.r.n.toUpperCase())}</td>`+V.map(c=>{const v=x.r.s[c];return `<td class="${x.c.cnt.includes(c)?"c":""} ${S.col?bs[c]:""}">${v==null?"-":v}</td><td class="g ${S.col?bs[c]:""}">${grade(v)}</td>`}).join("")+`<td><b>${x.c.raw}</b></td><td><b>${x.c.agg}</b></td><td>${x.c.ones}</td><td><b>${x.pos??""}</b></td></tr>`}).join("");
+ const f1=`<tr class="f"><td></td><td class="n">SUBJECT TOTAL</td>${V.map(c=>`<td>${st.tot[c]}</td><td></td>`).join("")}<td>${st.tr}</td><td></td><td></td><td></td></tr>`;
+ const f2=`<tr class="f"><td></td><td class="n">CLASS AVERAGE</td>${V.map(c=>`<td>${st.avg[c]}</td><td>${grade(st.avg[c])}</td>`).join("")}<td>${st.avgRaw}</td><td>${st.avgAgg}</td><td></td><td></td></tr>`;
+ return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>@page{size:A3 landscape;margin:10mm}body{font-family:Arial,sans-serif;margin:0;color:#111}
+h1{font-size:21px;text-align:center;margin:0}h2{font-size:16px;text-align:center;margin:4px 0}p.t{font-size:13px;text-align:center;margin:0 0 7px}
+table{width:100%;border-collapse:collapse;font-size:${(13.5*z).toFixed(1)}px}th,td{border:.6px solid #555;padding:6px 2px;text-align:center}th{background:#1f3864;color:#fff;font-size:${(15.5*z).toFixed(1)}px;font-weight:bold;padding:8px 2px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+thead{display:table-header-group}tfoot{display:table-row-group}tr{page-break-inside:avoid}td.n{text-align:left;padding-left:3px;white-space:nowrap}
+td.g{background:#f0f2f7}td.c{background:#e6f0ff;font-weight:bold}tr.f td{background:#d9e1f2;font-weight:bold}td,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+td.b1,td.b2,td.b3{outline-width:2.5px;outline-style:solid;outline-offset:-2.5px}td.b1{outline-color:#1a9e55}td.b2{outline-color:#e0a800}td.b3{outline-color:#d62828}.note{font-size:12px;margin-top:10px;color:#333}</style></head><body><h1>${esc(S.school)}</h1><h2>${esc(S.exam)}</h2>${S.term?`<p class="t">${esc(S.term)}</p>`:""}
+<table><thead>${head}</thead><tbody>${body}${f1}${f2}</tbody></table>
+<div class="note">NOTE: AGGREGATE = GRADES OF CORE SUBJECTS (ENG, MATH, SCI., SOC. STUD.) + GRADES OF BEST TWO ELECTIVES (${names}).<br>RAW SCORE = SCORES OF CORE SUBJECTS + SCORES OF BEST TWO ELECTIVES. Shaded bold elective scores are the ones counted.${vn?"<br>"+vn:""}${cn?"<br>"+cn:""}</div></body></html>`;
+}
+const fname=()=>((S.exam||"Score Sheet").replace(/[^\w\- ]+/g,"").trim().replace(/\s+/g,"_")||"Score_Sheet")+".pdf";
+
+$("pdf").onclick=async()=>{
+ const st=stats();if(!st.n){msg("Enter at least one learner first.");return}
+ if(!st.sorted.length){msg("No learners match the current filter.");return}
+ if(window.api){
+  try{const r=await window.api.savePdf(printHTML(st),fname());msg(r.ok?"PDF saved: "+r.path:"Download cancelled.")}catch(e){msg("Could not create the PDF: "+e.message)}return}
+ if(!window.jspdf){msg("PDF library did not load — check your connection and reload.");return}
+ const doc=new window.jspdf.jsPDF({orientation:"landscape",unit:"mm",format:"a3"}),L=st.sorted,V=vis(),B=2+2*V.length,z=S.zp;
+ doc.setFont("helvetica","bold");doc.setFontSize(20);doc.text(S.school||"",210,14,{align:"center"});
+ doc.setFontSize(14);doc.text(S.exam||"",210,22,{align:"center"});
+ doc.setFont("helvetica","normal");doc.setFontSize(11);if(S.term)doc.text(S.term,210,29,{align:"center"});
+ const head=[["S/N","NAMES",...V.flatMap(c=>[SUB[c],"G"]),"RAW SCORE","AGG.","1'S","POS."]];
+ const body=L.map((x,k)=>[k+1,x.r.n.toUpperCase(),...V.flatMap(c=>[x.r.s[c]==null?"-":x.r.s[c],grade(x.r.s[c])]),x.c.raw,x.c.agg,x.c.ones,x.pos??""]);
+ const foot=[["","SUBJECT TOTAL",...V.flatMap(c=>[st.tot[c],""]),st.tr,"","",""],["","CLASS AVERAGE",...V.flatMap(c=>[st.avg[c],grade(st.avg[c])]),st.avgRaw,st.avgAgg,"",""]];
+ const nameW=Math.max(74,Math.min(140,404-(10+V.length*25.5+62)));
+ const cs={0:{cellWidth:10},1:{halign:"left",cellWidth:nameW}};
+ V.forEach((_,k)=>{cs[2+2*k]={cellWidth:16};cs[3+2*k]={cellWidth:9.5}});
+ cs[B]={cellWidth:20};cs[B+1]={cellWidth:15};cs[B+2]={cellWidth:12};cs[B+3]={cellWidth:15};
+ doc.autoTable({head,body,foot,startY:34,theme:"grid",margin:{left:8,right:8,bottom:16},showFoot:"lastPage",
+  styles:{fontSize:11*z,cellPadding:2.3*z,halign:"center",valign:"middle",lineWidth:.1,lineColor:[120,120,120],textColor:20},
+  headStyles:{fillColor:[31,56,100],textColor:255,fontSize:12.5*z,fontStyle:"bold",cellPadding:1.2},footStyles:{fillColor:[217,225,242],textColor:0,fontStyle:"bold"},columnStyles:cs,
+  didParseCell:d=>{if(d.section!=="body")return;const c=d.column.index;
+   if(c>=2&&c<B&&c%2===1)d.cell.styles.fillColor=[240,242,247];
+   if(c>=B)d.cell.styles.fontStyle="bold";
+   if(S.col&&c>=2&&c<B){const b=bands(L[d.row.index].r.s)[V[Math.floor((c-2)/2)]];if(b){d.cell.styles.lineColor={b1:[26,158,85],b2:[224,168,0],b3:[214,40,40]}[b];d.cell.styles.lineWidth=.8}}
+   if(c>=2&&c<B&&c%2===0&&L[d.row.index].c.cnt.includes(V[(c-2)/2])){d.cell.styles.fontStyle="bold";d.cell.styles.fillColor=[230,240,255]}}});
+ const names=SUB.slice(4).filter((_,i)=>S.elig[i]).join(", "),vn=viewNote();
+ const y=Math.min(doc.lastAutoTable.finalY+7,274);doc.setFontSize(10.5);doc.setTextColor(60);
+ doc.text("NOTE: AGGREGATE = GRADES OF CORE SUBJECTS (ENG, MATH, SCI., SOC. STUD.) + GRADES OF BEST TWO ELECTIVES ("+names+").",8,y);
+ doc.text("RAW SCORE = SCORES OF CORE SUBJECTS + SCORES OF BEST TWO ELECTIVES. Shaded bold elective scores are the ones counted.",8,y+5);
+ let yy=y+10;if(vn){doc.text(vn,8,yy);yy+=5}if(S.col)doc.text(colNote(),8,yy);
+ let dl=null;try{dl=window.claude&&await window.claude.use("downloads")}catch(e){}
+ if(!dl){doc.save(fname());msg("PDF downloaded: "+fname());return}
+ try{await dl.save({filename:fname(),data:doc.output("arraybuffer")});msg("PDF ready: "+fname())}
+ catch(e){msg(e&&e.code==="declined"?"Download cancelled.":"Could not save the PDF ("+(e&&e.code||"error")+").")}
+};
+</script>
+<script>
+(function(){
+const STD=["ENG","MATH","SCI","RME","SOC","CAD","TWI","CAT","FRE","COM"];
+const cleanName=n=>String(n||"").trim().toUpperCase().slice(0,12);
+function remapSubjects(names){
+ names=names.filter((n,i,a)=>n&&a.indexOf(n)===i).slice(0,20);if(!names.length)return;
+ const old=S.subs.map(x=>x.toUpperCase()),idx=names.map(n=>old.indexOf(n));
+ S.rows.forEach(r=>{r.s=idx.map(i=>i<0?null:r.s[i])});S.show=idx.map(i=>i<0?1:S.show[i]);S.subs=names;
+ if(typeof S.sortBy==="number")S.sortBy="tot";if(typeof S.fSub==="number")S.fSub="all"}
+function subjectOp(kind,i,val){
+ if(window.viewOnly||S.lockSubs)return "";const n=S.subs.length;let reindex=false;
+ if(kind==="add"){const nm=cleanName(val);if(!nm)return "Type a subject name.";if(S.subs.some(x=>x.toUpperCase()===nm))return "That subject is already there.";if(n>=20)return "A sheet can have at most 20 subjects.";S.subs.push(nm);S.show.push(1);S.rows.forEach(r=>r.s.push(null))}
+ else if(kind==="rename"){const nm=cleanName(val);if(!nm)return "A subject needs a name.";if(S.subs.some((x,k)=>k!==i&&x.toUpperCase()===nm))return "That subject is already there.";S.subs[i]=nm}
+ else if(kind==="remove"){if(n<=1)return "A sheet needs at least one subject.";S.subs.splice(i,1);S.show.splice(i,1);S.rows.forEach(r=>r.s.splice(i,1));if(!S.show.some(v=>v))S.show[0]=1;reindex=true}
+ else if(kind==="move"){const j=i+val;if(j<0||j>=n)return "";const sw=a=>{const t=a[i];a[i]=a[j];a[j]=t};sw(S.subs);sw(S.show);S.rows.forEach(r=>sw(r.s));reindex=true}
+ else if(kind==="reset"){remapSubjects(STD.slice())}
+ if(reindex){if(typeof S.sortBy==="number")S.sortBy="tot";if(typeof S.fSub==="number")S.fSub="all"}
+ build();return ""}
+let KEY="";let nid=1;
+const $=id=>document.getElementById("ct_"+id);
+const blank=()=>({id:0,n:"",s:S.subs.map(()=>null)});
+const ctDefaults=()=>({school:"SANTA MARIEL ICAL CLASS SCHOOL",cls:"",title:"MASTER SHEET FOR CLASS TEST 1",term:"FIRST TERM (2026/2027)",teacher:"",max:100,subs:STD.slice(),show:STD.map(()=>1),live:true,sortBy:"tot",fSub:"all",fMin:null,fMax:null,zs:1,zp:1,col:true,cmode:"learner",rows:[]});
+let S=ctDefaults();
+window.ctLoad=function(key,prof,no){
+ KEY=key;S=ctDefaults();prof=prof||{};
+ if(prof.school)S.school=prof.school;S.cls=prof.cls||"";S.teacher=prof.teacher||"";S.title="MASTER SHEET FOR CLASS TEST "+(no||1);
+ let hadSubs=false;try{const t=window.DS.get(KEY);if(t){const o=JSON.parse(t);if(o&&o.rows){S=Object.assign(S,o);hadSubs=Array.isArray(o.subs)&&o.subs.length>0}}}catch(e){}
+ S.subs=(Array.isArray(S.subs)&&S.subs.length?S.subs:STD).map(String);
+ if(!Array.isArray(S.show)||S.show.length!==S.subs.length)S.show=S.subs.map((_,i)=>S.show&&S.show[i]!=null?S.show[i]:1);
+ S.rows.forEach(r=>{if(!Array.isArray(r.s))r.s=[];while(r.s.length<S.subs.length)r.s.push(null);r.s.length=S.subs.length});
+ if(prof.lock){if(prof.school)S.school=prof.school;if(prof.cls!=null)S.cls=prof.cls;if(prof.teacher!=null)S.teacher=prof.teacher;if(prof.title)S.title="MASTER SHEET FOR "+String(prof.title).toUpperCase();if(prof.term)S.term=prof.term;if(prof.max)S.max=+prof.max}
+ S.lock=!!prof.lock;
+ if(Array.isArray(prof.subjects)&&prof.subjects.length&&(!hadSubs||prof.lockSubjects))remapSubjects(prof.subjects.map(cleanName));
+ S.lockSubs=!!prof.lockSubjects;
+ if(!S.rows.length)S.rows=[0,1,2,3,4].map(()=>blank());
+ nid=1;S.rows.forEach(r=>{r.id=nid++});
+ build();
+};
+const fix=v=>Math.round(v*10)/10;
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const active=r=>r.n.trim()!==""||r.s.some(v=>v!=null),ranked=r=>r.s.some(v=>v!=null);
+const vis=()=>S.subs.map((_,i)=>i).filter(i=>S.show[i]);
+const total=r=>fix(vis().reduce((a,i)=>a+(r.s[i]||0),0));
+const ord=n=>n+(n%100>=11&&n%100<=13?"th":(["th","st","nd","rd"][n%10]||"th"));
+const filtering=()=>S.fSub!=="all"&&(S.fMin!=null||S.fMax!=null);
+const bc=v=>v==null?"":v>=.7*S.max?"b1":v>=.5*S.max?"b2":"b3";
+function bands(s){
+ if(S.cmode==="fixed")return s.map(bc);
+ const v=vis().map(i=>s[i]).filter(x=>x!=null);if(!v.length)return s.map(()=>"");
+ const mn=Math.min(...v),mx=Math.max(...v);
+ return s.map(x=>x==null?"":mx===mn?"b2":(t=>t>=2/3?"b1":t<=1/3?"b3":"b2")((x-mn)/(mx-mn)))}
+const setBand=(td,b)=>{td.classList.remove("b1","b2","b3");if(b)td.classList.add(b)};
+const sortLabel=k=>k==="tot"?"TOTAL":k==="name"?"NAME (A–Z)":S.subs[k]+" SCORE";
+const fLabel=k=>k==="tot"?"TOTAL":S.subs[k];
+function passes(x){if(!filtering())return true;
+ const v=S.fSub==="tot"?x.t:(x.r.s[S.fSub]==null?0:x.r.s[S.fSub]);
+ return (S.fMin==null||v>=S.fMin)&&(S.fMax==null||v<=S.fMax)}
+function cmp(k){const rk=(x,y)=>ranked(y.r)-ranked(x.r);
+ if(k==="name")return (x,y)=>(!x.r.n.trim()-!y.r.n.trim())||x.r.n.localeCompare(y.r.n)||x.i-y.i;
+ if(typeof k==="number")return (x,y)=>rk(x,y)||((y.r.s[k]??-1)-(x.r.s[k]??-1))||y.t-x.t||x.i-y.i;
+ return (x,y)=>rk(x,y)||(x.pos-y.pos)||x.i-y.i}
+function stats(){
+ const rows=S.rows.map((r,i)=>({r,i,t:total(r),pos:null}));const a=rows.filter(x=>active(x.r)),rk=a.filter(x=>ranked(x.r));
+ rk.forEach(x=>x.pos=1+rk.filter(y=>y.t>x.t).length);
+ const n=a.length,tot=S.subs.map((_,c)=>fix(a.reduce((s,x)=>s+(x.r.s[c]||0),0))),avg=tot.map(t=>n?fix(t/n):null);
+ const gt=fix(a.reduce((s,x)=>s+x.t,0)),ga=n?fix(gt/n):null;
+ const sorted=a.filter(passes).sort(cmp(S.sortBy));
+ const view=S.live?[...sorted,...(filtering()?[]:rows.filter(x=>!active(x.r)))]:(filtering()?rows.filter(x=>active(x.r)&&passes(x)):rows);
+ return{rows,a,view,sorted,n,tot,avg,gt,ga}}
+const save=()=>{if(window.viewOnly)return;try{window.DS.set(KEY,JSON.stringify(S))}catch(e){}};
+function lockUI(){const ro=!!window.viewOnly;
+ $("tb").querySelectorAll("input,button").forEach(e=>e.disabled=ro);
+ ["school","cls","title","term","teacher","max"].forEach(k=>$(k).disabled=ro||S.lock);
+ $("shw").querySelectorAll("input,button").forEach(e=>e.disabled=ro);
+ ["add","add10","clr"].forEach(k=>$(k).style.display=ro?"none":"")}
+function controls(){
+  const so=String(S.sortBy),fo=String(S.fSub);
+  $("sortBy").innerHTML=`<option value="tot">Total (high → low)</option><option value="name">Name (A–Z)</option>`+S.subs.map((n,i)=>`<option value="${i}">${esc(n)} score (high → low)</option>`).join("");
+  $("fSub").innerHTML=`<option value="all">No filter</option><option value="tot">Total</option>`+S.subs.map((n,i)=>`<option value="${i}">${esc(n)} score</option>`).join("");
+  $("sortBy").value=so;$("fSub").value=fo;
+  if(document.activeElement!==$("fMin"))$("fMin").value=S.fMin==null?"":S.fMin;
+  if(document.activeElement!==$("fMax"))$("fMax").value=S.fMax==null?"":S.fMax;
+  const ro=!!window.viewOnly,edit=!ro&&!S.lockSubs,ns=$("newsub"),nsv=ns?ns.value:"",nsf=!!ns&&document.activeElement===ns;
+  $("shw").innerHTML=S.subs.map((n,i)=>`<span class="subchip"><input type="checkbox" data-s="${i}" ${S.show[i]?"checked":""} title="Include in the total">`+(edit?`<input class="subname" data-sn="${i}" value="${esc(n)}" size="${Math.max(4,n.length+1)}"><button data-mv="${i}" data-d="-1" title="Move left">←</button><button data-mv="${i}" data-d="1" title="Move right">→</button><button data-rm="${i}" title="Remove this subject">×</button>`:`<b>${esc(n)}</b>`)+`</span>`).join("")+(edit?`<span class="subadd"><input id="ct_newsub" placeholder="New subject" size="12" maxlength="12"><button id="ct_addsub">Add subject</button><button id="ct_resetsub">Reset to standard</button></span>`:S.lockSubs&&!ro?`<span class="sub">The administrator has set the subjects for this assessment.</span>`:"");
+  if(edit&&nsv){$("newsub").value=nsv}if(edit&&nsf)$("newsub").focus();
+  ["school","cls","title","term","teacher"].forEach(k=>{if(document.activeElement!==$(k))$(k).value=S[k]});
+  if(document.activeElement!==$("max"))$("max").value=S.max;
+  const on=filtering(),fb=$("fbtn"),ch=$("fchip");if(fb)fb.classList.toggle("act",on);
+  if(ch){ch.hidden=!on;$("fchiptxt").textContent=on?`${fLabel(S.fSub)}: ${S.fMin==null?"any":S.fMin} to ${S.fMax==null?"any":S.fMax}`:""}}
+function build(focusSel){
+ const ae=document.activeElement,keep=ae&&ae.dataset&&(ae.dataset.n!=null?`[data-n="${ae.dataset.n}"]`:ae.dataset.c!=null?`[data-r="${ae.dataset.r}"][data-c="${ae.dataset.c}"]`:null);
+ $("live").checked=!!S.live;$("col").checked=!!S.col;$("cmode").value=S.cmode;$("cmode").style.display=S.col?"":"none";
+ $("lgd").style.visibility=S.col?"visible":"hidden";
+ $("lgd").innerHTML=S.cmode==="fixed"?`<i class="sw b1"></i>${.7*S.max}+<i class="sw b2"></i>${.5*S.max}–${.7*S.max}<i class="sw b3"></i>below ${.5*S.max}`:`<i class="sw b1"></i>learner's best subjects<i class="sw b2"></i>average<i class="sw b3"></i>weakest subjects`;
+ $("wrap").style.setProperty("--z",S.zs);$("zsv").textContent=Math.round(S.zs*100)+"%";$("zpv").textContent=Math.round(S.zp*100)+"%";controls();
+ const V=vis();
+ $("th").innerHTML="<tr><th>#</th><th class='n'>NAMES</th>"+V.map(c=>`<th>${S.subs[c]}</th>`).join("")+"<th>TOTAL</th><th>POS</th><th></th></tr>";
+ const st=stats();
+ $("tb").innerHTML=st.view.map((x,k)=>`<tr data-row="${x.i}"><td>${k+1}</td><td class="n"><input data-n="${x.i}" value="${esc(x.r.n)}"></td>`+
+  V.map(c=>{const v=x.r.s[c];return `<td data-t="${c}"><input class="s" type="number" step="any" min="0" max="${S.max}" data-r="${x.i}" data-c="${c}" value="${v==null?"":v}"></td>`}).join("")+
+  `<td class="r" data-k="tot"></td><td class="r" data-k="pos"></td><td class="x"><button data-d="${x.i}" title="Delete row">×</button></td></tr>`).join("");
+ refresh();lockUI();
+ const t=focusSel||keep;if(t){const el=$("tb").querySelector(t);if(el)el.focus()}}
+function refresh(){
+ const st=stats(),V=vis();
+ st.rows.forEach(x=>{const tr=$("tb").querySelector(`tr[data-row="${x.i}"]`);if(!tr)return;const on=active(x.r),bs=bands(x.r.s);
+  tr.querySelectorAll("[data-t]").forEach(td=>setBand(td,S.col&&on?bs[+td.dataset.t]:""));
+  tr.querySelector("[data-k=tot]").textContent=on?x.t:"";tr.querySelector("[data-k=pos]").textContent=x.pos==null?"":ord(x.pos)});
+ $("subsum").textContent=`· ${V.length} of ${S.subs.length} counted`;
+ $("cnt").textContent=filtering()?`Showing ${st.sorted.length} of ${st.n} learners`:`${st.n} learner${st.n===1?"":"s"}`;
+ $("tf").innerHTML=`<tr><td></td><td class="n"><b>SUBJECT TOTAL</b></td>${V.map(c=>`<td>${st.tot[c]}</td>`).join("")}<td>${st.gt}</td><td colspan=2></td></tr>`+
+ `<tr><td></td><td class="n"><b>CLASS AVERAGE</b></td>${V.map(c=>`<td>${st.avg[c]??""}</td>`).join("")}<td>${st.ga??""}</td><td colspan=2></td></tr>`;
+ save()}
+let tmr;const later=()=>{clearTimeout(tmr);tmr=setTimeout(()=>{if(S.live||filtering())build()},900)};
+const msg=t=>{$("msg").textContent=t;$("dmsg").textContent=t};
+["school","cls","title","term","teacher"].forEach(k=>$(k).addEventListener("input",e=>{S[k]=e.target.value;save()}));
+$("max").addEventListener("input",e=>{const v=+e.target.value;if(v>0){S.max=v;S.rows.forEach(r=>r.s=r.s.map(x=>x==null?x:Math.min(x,v)));build()}});
+$("shw").addEventListener("change",e=>{const t=e.target;
+ if(t.dataset.sn!=null){const m=subjectOp("rename",+t.dataset.sn,t.value);if(m){msg(m);build()}return}
+ if(t.dataset.s==null)return;S.show[+t.dataset.s]=t.checked?1:0;if(!S.show.some(v=>v))S.show[+t.dataset.s]=1;build()});
+let rmArm=null;
+$("shw").addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(!b)return;
+ if(b.dataset.mv!=null){const m=subjectOp("move",+b.dataset.mv,+b.dataset.d);if(m)msg(m);return}
+ if(b.dataset.rm!=null){const i=+b.dataset.rm,has=S.rows.some(r=>r.s[i]!=null);
+  if(has&&rmArm!==i){rmArm=i;b.textContent="Delete scores?";setTimeout(()=>{rmArm=null;b.textContent="×"},3500);return}
+  rmArm=null;const m=subjectOp("remove",i);if(m)msg(m);return}
+ if(b.id==="ct_addsub"){const m=subjectOp("add",0,$("newsub").value);msg(m||"Subject added.");return}
+ if(b.id==="ct_resetsub"){if(rmArm!=="reset"){rmArm="reset";b.textContent="Click again to reset";setTimeout(()=>{rmArm=null;b.textContent="Reset to standard"},3500);return}rmArm=null;subjectOp("reset");msg("Subjects reset to the standard list.")}});
+$("shw").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="ct_newsub"){e.preventDefault();const m=subjectOp("add",0,e.target.value);msg(m||"Subject added.")}});
+$("live").addEventListener("change",e=>{S.live=e.target.checked;build()});
+$("sortBy").addEventListener("change",e=>{const v=e.target.value;S.sortBy=/^\d+$/.test(v)?+v:v;build()});
+$("fSub").addEventListener("change",e=>{const v=e.target.value;S.fSub=/^\d+$/.test(v)?+v:v;build()});
+["fMin","fMax"].forEach(id=>$(id).addEventListener("input",e=>{const v=e.target.value;S[id]=v===""?null:+v;build()}));
+$("fClr").onclick=()=>{S.fSub="all";S.fMin=null;S.fMax=null;build()};
+$("fchipx").onclick=()=>$("fClr").onclick();
+const zc=(k,d,lo,hi)=>{S[k]=Math.round(Math.min(hi,Math.max(lo,S[k]+d))*10)/10;build()};
+$("zsm").onclick=()=>zc("zs",-.1,.7,1.8);$("zsp").onclick=()=>zc("zs",.1,.7,1.8);
+$("zpm").onclick=()=>zc("zp",-.1,.7,1.4);$("zpp").onclick=()=>zc("zp",.1,.7,1.4);
+$("col").addEventListener("change",e=>{S.col=e.target.checked;build()});
+$("cmode").addEventListener("change",e=>{S.cmode=e.target.value;build()});
+$("tb").addEventListener("input",e=>{const t=e.target;
+ if(t.dataset.n!=null)S.rows[+t.dataset.n].n=t.value;
+ else if(t.dataset.c!=null){const v=t.value===""?null:Math.max(0,Math.min(S.max,Math.round(+t.value*10)/10));S.rows[+t.dataset.r].s[+t.dataset.c]=v}
+ refresh();later()});
+$("tb").addEventListener("click",e=>{const d=e.target.dataset.d;if(d!=null){S.rows.splice(+d,1);if(!S.rows.length)S.rows.push({...blank(),id:nid++});build()}});
+const addRows=n=>{for(let i=0;i<n;i++)S.rows.push({...blank(),id:nid++});build(`[data-n="${S.rows.length-n}"]`)};
+$("add").onclick=()=>addRows(1);$("add10").onclick=()=>addRows(10);
+window.ctImportNames=function(list){if(window.viewOnly)return 0;
+ const seen=new Set(S.rows.map(r=>r.n.trim().toUpperCase()).filter(Boolean)),names=[];
+ for(const x of list){const n=String(x).trim();if(n&&!seen.has(n.toUpperCase())){seen.add(n.toUpperCase());names.push(n)}}
+ let i=0;for(const r of S.rows){if(i>=names.length)break;if(!active(r))r.n=names[i++]}
+ for(;i<names.length;i++){const b=blank();b.id=nid++;b.n=names[i];S.rows.push(b)}
+ build();return names.length};
+$("tb").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const t=e.target;if(t.dataset.c==null&&t.dataset.n==null)return;e.preventDefault();
+ const tr=t.closest("tr"),nx=tr&&tr.nextElementSibling;if(!nx)return;const el=nx.querySelector(t.dataset.c!=null?`input[data-c="${t.dataset.c}"]`:"input[data-n]");if(el){el.focus();if(el.select)el.select()}});
+let armed=false;
+$("clr").onclick=()=>{if(!armed){armed=true;$("clr").textContent="Click again to erase all learners";setTimeout(()=>{armed=false;$("clr").textContent="Clear all"},3500);return}
+ armed=false;$("clr").textContent="Clear all";S.rows=[0,1,2,3,4].map(()=>({...blank(),id:nid++}));build();msg("All learners cleared.")};
+
+const heading=()=>[S.title,S.term].filter(Boolean).join(" - ");
+function viewNote(){const p=[];
+ if(S.sortBy!=="tot")p.push("SORTED BY "+sortLabel(S.sortBy));
+ if(filtering())p.push(`FILTER: ${fLabel(S.fSub)} FROM ${S.fMin??0} TO ${S.fMax??"MAX"}`);
+ if(vis().length<S.subs.length)p.push("SUBJECTS INCLUDED: "+vis().map(c=>S.subs[c]).join(", "));
+ return p.length?"VIEW: "+p.join(" | ")+". POSITION IS FOR THE WHOLE CLASS.":""}
+const colNote=()=>!S.col?"":S.cmode==="fixed"?`COLOUR OUTLINES: GREEN = ${.7*S.max} AND ABOVE, YELLOW = ${.5*S.max}-${.7*S.max}, RED = BELOW ${.5*S.max}.`:"COLOUR OUTLINES (PER LEARNER): GREEN = THE LEARNER'S STRONGEST SUBJECTS, YELLOW = AVERAGE, RED = THE LEARNER'S WEAKEST SUBJECTS.";
+const note=()=>"NOTE: TOTAL = SUM OF THE SUBJECT SCORES SHOWN"+(S.max!==100?` (EACH OUT OF ${S.max})`:"")+". POSITION = RANK BY TOTAL.";
+function printHTML(st){
+ const V=vis(),z=S.zp,vn=viewNote(),cn=colNote();
+ const head="<tr><th>S/N</th><th>NAME</th>"+V.map(c=>`<th>${S.subs[c]}</th>`).join("")+"<th>TOT</th><th>POS</th></tr>";
+ const body=st.sorted.map((x,k)=>{const bs=bands(x.r.s);return `<tr><td>${k+1}</td><td class="n">${esc(x.r.n.toUpperCase())}</td>`+V.map(c=>{const v=x.r.s[c];return `<td class="${S.col?bs[c]:""}">${v==null?"-":v}</td>`}).join("")+`<td><b>${x.t}</b></td><td><b>${x.pos==null?"":ord(x.pos)}</b></td></tr>`}).join("");
+ const f1=`<tr class="f"><td></td><td class="n">SUBJECT TOTAL</td>${V.map(c=>`<td>${st.tot[c]}</td>`).join("")}<td>${st.gt}</td><td></td></tr>`;
+ const f2=`<tr class="f"><td></td><td class="n">CLASS AVERAGE</td>${V.map(c=>`<td>${st.avg[c]}</td>`).join("")}<td>${st.ga}</td><td></td></tr>`;
+ return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>@page{size:A3 landscape;margin:10mm}body{font-family:Arial,sans-serif;margin:0;color:#111}
+h1{font-size:21px;text-align:center;margin:0}h2{font-size:16px;text-align:center;margin:4px 0 8px}.m{display:flex;justify-content:space-between;font-weight:bold;font-size:14px;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:${(14*z).toFixed(1)}px}th,td{border:.6px solid #555;padding:${(7*z).toFixed(1)}px 3px;text-align:center}th{background:#1f3864;color:#fff;font-size:${(16*z).toFixed(1)}px;padding:9px 3px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+thead{display:table-header-group}tfoot{display:table-row-group}tr{page-break-inside:avoid}td.n{text-align:left;padding-left:5px;white-space:nowrap}
+tr.f td{background:#d9e1f2;font-weight:bold;-webkit-print-color-adjust:exact;print-color-adjust:exact}td.b1,td.b2,td.b3{outline-width:2.5px;outline-style:solid;outline-offset:-2.5px}td.b1{outline-color:#1a9e55}td.b2{outline-color:#e0a800}td.b3{outline-color:#d62828}
+.note{font-size:12px;margin-top:10px;color:#333}.sig{margin-top:26px;font-size:14px;page-break-inside:avoid}.sig b{display:block}.sig span{display:inline-block;border-bottom:1px solid #111;width:260px;margin-left:8px}</style></head><body>
+<h1>${esc(S.school)}</h1><h2>${esc(heading())}</h2><div class="m"><span>CLASS: ${esc(S.cls)}</span><span>CLASS TEACHER: ${esc(S.teacher)}</span></div>
+<table><thead>${head}</thead><tbody>${body}${f1}${f2}</tbody></table>
+<div class="note">${note()}${vn?"<br>"+vn:""}${cn?"<br>"+cn:""}</div>
+<div class="sig"><div>Name: <b style="display:inline">${esc(S.teacher)}</b></div><div>Class Teacher</div><div style="margin-top:14px">Sign:<span></span></div></div></body></html>`}
+const fname=()=>((heading()||"Class Test").replace(/[^\w\- ]+/g,"").trim().replace(/\s+/g,"_")||"Class_Test")+".pdf";
+$("pdf").onclick=async()=>{
+ const st=stats();if(!st.n){msg("Enter at least one learner first.");return}
+ if(!st.sorted.length){msg("No learners match the current filter.");return}
+ if(window.api){try{const r=await window.api.savePdf(printHTML(st),fname());msg(r.ok?"PDF saved: "+r.path:"Download cancelled.")}catch(e){msg("Could not create the PDF: "+e.message)}return}
+ if(!window.jspdf){msg("PDF library did not load — check your connection and reload.");return}
+ const doc=new window.jspdf.jsPDF({orientation:"landscape",unit:"mm",format:"a3"}),L=st.sorted,V=vis(),B=2+V.length,z=S.zp;
+ doc.setFont("helvetica","bold");doc.setFontSize(20);doc.text(S.school||"",210,14,{align:"center"});
+ doc.setFontSize(14);doc.text(heading(),210,22,{align:"center"});
+ doc.setFontSize(12);doc.text("CLASS: "+(S.cls||""),8,31);doc.text("CLASS TEACHER: "+(S.teacher||""),412,31,{align:"right"});
+ const head=[["S/N","NAME",...V.map(c=>S.subs[c]),"TOT","POS"]];
+ const body=L.map((x,k)=>[k+1,x.r.n.toUpperCase(),...V.map(c=>x.r.s[c]==null?"-":x.r.s[c]),x.t,x.pos==null?"":ord(x.pos)]);
+ const foot=[["","SUBJECT TOTAL",...V.map(c=>st.tot[c]),st.gt,""],["","CLASS AVERAGE",...V.map(c=>st.avg[c]),st.ga,""]];
+ const avail=404-10-26-22,name=Math.min(120,Math.max(74,avail-V.length*22)),sw=Math.min(36,(avail-name)/V.length);
+ const cs={0:{cellWidth:10},1:{halign:"left",cellWidth:name}};V.forEach((_,k)=>cs[2+k]={cellWidth:sw});cs[B]={cellWidth:26};cs[B+1]={cellWidth:22};
+ doc.autoTable({head,body,foot,startY:35,theme:"grid",margin:{left:8,right:8,bottom:16},showFoot:"lastPage",
+  styles:{fontSize:12*z,cellPadding:2.6*z,halign:"center",valign:"middle",lineWidth:.1,lineColor:[120,120,120],textColor:20},
+  headStyles:{fillColor:[31,56,100],textColor:255,fontSize:13*z,fontStyle:"bold",cellPadding:1.5},footStyles:{fillColor:[217,225,242],textColor:0,fontStyle:"bold"},columnStyles:cs,
+  didParseCell:d=>{if(d.section!=="body")return;const c=d.column.index;
+   if(c>=B)d.cell.styles.fontStyle="bold";
+   if(S.col&&c>=2&&c<B){const b=bands(L[d.row.index].r.s)[V[c-2]];if(b){d.cell.styles.lineColor={b1:[26,158,85],b2:[224,168,0],b3:[214,40,40]}[b];d.cell.styles.lineWidth=.8}}}});
+ const vn=viewNote();let y=doc.lastAutoTable.finalY+7;if(y>262){doc.addPage();y=20}
+ doc.setFont("helvetica","normal");doc.setFontSize(10.5);doc.setTextColor(60);doc.text(note(),8,y);let yy=y+5;
+ if(vn){doc.text(vn,8,yy);yy+=5}if(S.col)doc.text(colNote(),8,yy);
+ let sy=yy+16;if(sy>280){doc.addPage();sy=30}
+ doc.setTextColor(20);doc.setFontSize(12);doc.text("Name: ",8,sy);doc.setFont("helvetica","bold");doc.text(S.teacher||"",22,sy);doc.setFont("helvetica","normal");
+ doc.text("Class Teacher",8,sy+6);doc.text("Sign:",8,sy+15);doc.line(22,sy+15,90,sy+15);
+ let dl=null;try{dl=window.claude&&await window.claude.use("downloads")}catch(e){}
+ if(!dl){doc.save(fname());msg("PDF downloaded: "+fname());return}
+ try{await dl.save({filename:fname(),data:doc.output("arraybuffer")});msg("PDF ready: "+fname())}
+ catch(e){msg(e&&e.code==="declined"?"Download cancelled.":"Could not save the PDF ("+(e&&e.code||"error")+").")}
+};
+})();
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const esc=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const gnum=g=>g==="KG"?0:/^[1-9]$/.test(String(g))?+g:null;
+const gl=v=>+v===0?"KG":"Grade "+v;
+const gradeLabel=g=>g===""||g==null?"not set":g==="KG"?"KG":"Grade "+g;
+const gradeOpts=sel=>["","KG",1,2,3,4,5,6,7,8,9].map(g=>`<option value="${g}" ${String(g)===String(sel)?"selected":""}>${g===""?"Choose grade…":g==="KG"?"KG":"Grade "+g}</option>`).join("");
+const gOpts=sel=>[0,1,2,3,4,5,6,7,8,9].map(v=>`<option value="${v}" ${+v===+sel?"selected":""}>${gl(v)}</option>`).join("");
+const rangeLabel=a=>a.minGrade<=0&&a.maxGrade>=9?"All grades":a.minGrade===a.maxGrade?gl(a.minGrade):gl(a.minGrade)+" to "+gl(a.maxGrade);
+const THEME_SW='<div class="auththeme"><span class="themesw" title="Appearance"><button data-theme-set="light"><span class="ti">☀</span><span class="tl"> Light</span></button><button data-theme-set="dark"><span class="ti">☾</span><span class="tl"> Dark</span></button><button data-theme-set="auto"><span class="ti">◐</span><span class="tl"> Auto</span></button></span></div>';
+const view=h=>{$("authPane").innerHTML=h+THEME_SW;$("authPane").hidden=false;$("shell").hidden=true};
+const BRAND="Learner Score Master Sheet";
+const STD=["ENG","MATH","SCI","RME","SOC","CAD","TWI","CAT","FRE","COM"];
+const normSubs=txt=>{const out=[],seen=new Set();for(const x of String(txt).split(/[,\n;]+/)){const n=x.trim().replace(/\s+/g," ").toUpperCase();if(n&&!seen.has(n)){seen.add(n);out.push(n)}}return out};
+const subsError=l=>!l.length?"Add at least one subject.":l.length>20?"Use at most 20 subjects.":l.some(n=>n.length>12)?"Keep each subject name to 12 characters or fewer (use short forms such as ICT or HIST).":l.some(n=>!/^[A-Z0-9 .&-]+$/.test(n))?"Subject names can use letters, numbers, spaces, dots, dashes and &.":"";
+const pw=(id,auto)=>`<div class="pw"><input id="${id}" type="password" autocomplete="${auto}"><button type="button" class="eye" data-eye="${id}">Show</button></div>`;
+const eye=e=>{const b=e.target&&e.target.closest&&e.target.closest("button[data-eye]");if(!b)return;const i=$(b.dataset.eye);if(!i)return;const show=i.type==="password";i.type=show?"text":"password";b.textContent=show?"Hide":"Show"};
+let toastT=null;
+function toast(text,fn){const t=$("toast");t.textContent=text;t.hidden=false;t.onclick=()=>{t.hidden=true;if(fn)fn()};clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true},12000)}
+function sysNotify(title,body){try{if(window.Notification&&Notification.permission==="granted")new Notification(title,{body})}catch(e){}}
+const cfg=window.FIREBASE_CONFIG;
+if(!window.firebase||!cfg||!cfg.apiKey){
+ view(`<div class="card auth"><h1>Firebase isn't set up yet</h1><p class="sub">Open the file <b>firebase-config.js</b> in the app folder, paste in your Firebase project settings (see FIREBASE-SETUP.txt), then restart the app. The computer also needs internet.</p></div>`);return}
+firebase.initializeApp(cfg);const auth=firebase.auth(),db=firebase.firestore();
+try{db.settings({experimentalAutoDetectLongPolling:true,merge:true})}catch(e){}
+const sec=firebase.initializeApp(cfg,"sec");
+const ts=()=>firebase.firestore.FieldValue.serverTimestamp();
+const validEmail=e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+const authErr=e=>{const c=(e&&e.code)||"";return /invalid-credential|wrong-password|user-not-found|invalid-email|invalid-login/.test(c)?"Wrong email or password.":c==="auth/too-many-requests"?"Too many attempts. Wait a few minutes and try again.":c==="auth/network-request-failed"?"No internet connection.":c==="auth/email-already-in-use"?"That email already has an account.":c==="auth/weak-password"?"Password must be at least 6 characters.":c==="permission-denied"?"The server refused this (check the Firestore rules).":"Something went wrong ("+(c||(e&&e.message)||"unknown")+")."};
+let me=null,viewing=null,SCHOOL="SANTA MARIEL ICAL CLASS SCHOOL",tok=0,ed=null,aed=null,notice="",anotice="",USERS=[],ASSESS=[],curA=null,curSum=null;
+
+// ---------- cloud data store used by the sheets ----------
+const cache=new Map(),dirty=new Set();let timer=null,flushing=false,failed=false;
+const setSync=t=>{const s=$("sync");if(s)s.textContent=t};
+const kp=k=>{const i=k.indexOf("__");return[k.slice(0,i),k.slice(i+2)]};
+const schedule=ms=>{clearTimeout(timer);timer=setTimeout(flush,ms||1200)};
+window.DS={get:k=>cache.has(k)?cache.get(k):null,set:(k,v)=>{cache.set(k,v);dirty.add(k);setSync("Saving…");schedule()}};
+const countLearners=v=>{try{return JSON.parse(v).rows.filter(r=>(r.n||"").trim()||(r.s||[]).some(x=>x!=null)).length}catch(e){return 0}};
+async function flush(){
+ if(flushing||!dirty.size)return;flushing=true;failed=false;
+ try{for(const k of [...dirty]){const v=cache.get(k),[uid,aid]=kp(k),b=db.batch();
+   b.set(db.doc(`users/${uid}/sheets/${aid}`),{data:v,updatedAt:ts()});
+   b.set(db.doc(`summaries/${uid}__${aid}`),{uid,aid,n:countLearners(v),updatedAt:ts()},{merge:true});
+   await b.commit();if(cache.get(k)===v)dirty.delete(k)}
+  setSync(dirty.size?"Saving…":"Saved to the cloud")}
+ catch(e){failed=true;setSync("Not saved – offline? Retrying…");schedule(8000)}
+ flushing=false;if(dirty.size&&!failed)schedule()}
+async function prefetch(uid,aid){const k=uid+"__"+aid;if(dirty.has(k))return;
+ const d=await db.doc(`users/${uid}/sheets/${aid}`).get();if(d.exists)cache.set(k,d.data().data);else cache.delete(k)}
+window.addEventListener("beforeunload",()=>{flush()});
+
+// ---------- boot / sign-in ----------
+async function boot(){
+ view('<div class="card auth"><p class="sub">Connecting…</p></div>');
+ let setup;try{setup=await db.doc("config/setup").get()}catch(e){return view(`<div class="card auth"><h1>Can't reach the server</h1><p class="sub">Check the internet connection, then try again.</p><button class="p" id="retry">Try again</button></div>`),($("retry").onclick=boot)}
+ if(!setup.exists)return showSetup();
+ SCHOOL=setup.data().school||SCHOOL;
+ const un=auth.onAuthStateChanged(async u=>{un();if(u)await afterAuth(u);else showSignin()})}
+async function afterAuth(u){
+ let d;try{d=await db.doc("users/"+u.uid).get()}catch(e){await auth.signOut();return showSignin(authErr(e))}
+ if(!d.exists||d.data().active===false){await auth.signOut();return showSignin("This account isn't active. Ask the administrator.")}
+ me=Object.assign({uid:u.uid,email:u.email},d.data());enter()}
+function showSetup(){
+ view(`<div class="card auth"><div class="sub" style="font-weight:bold;margin-bottom:6px">${BRAND}</div><h1>Set up the administrator account</h1><p class="sub">This is the first start. The administrator creates the class tests and mock exams and adds the class teachers afterwards.</p>
+ <label>School name</label><input id="s_school" value="${esc(SCHOOL)}"><label>Your full name (as printed on the sheets)</label><input id="s_name">
+ <label>Email address</label><input id="s_email" type="email" autocomplete="username"><label>Password (at least 6 characters)</label>${pw("s_pw","new-password")}
+ <label>Confirm password</label>${pw("s_pw2","new-password")}
+ <label>If you are also a class teacher (optional)</label><div class="grid"><input id="s_cls" placeholder="Class, e.g. 7 PRIMROSE"><select id="s_grade">${gradeOpts("")}</select></div>
+ <p class="err" id="s_err"></p><button class="p" id="s_go">Create account</button></div>`);
+ $("s_go").onclick=async()=>{const err=m=>{$("s_err").textContent=m};
+  const school=$("s_school").value.trim()||SCHOOL,name=$("s_name").value.trim(),email=$("s_email").value.trim().toLowerCase(),pw=$("s_pw").value,cls=$("s_cls").value.trim(),grade=$("s_grade").value;
+  if(!name)return err("Enter your name.");if(!validEmail(email))return err("Enter a valid email address.");
+  if(pw.length<6)return err("Password must be at least 6 characters.");if(pw!==$("s_pw2").value)return err("The passwords don't match.");
+  err("Creating…");let cred=null;
+  try{try{await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)}catch(x){}cred=await auth.createUserWithEmailAndPassword(email,pw);const uid=cred.user.uid,b=db.batch();
+   b.set(db.doc("config/setup"),{school,createdAt:ts()});b.set(db.doc("users/"+uid),{name,email,role:"admin",cls,grade,active:true,createdAt:ts()});
+   await b.commit();SCHOOL=school;me={uid,email,name,role:"admin",cls,grade,active:true};enter()}
+  catch(e){err(authErr(e));try{if(cred&&auth.currentUser)await auth.currentUser.delete()}catch(x){}}}}
+function showSignin(msg){
+ view(`<div class="card auth"><div class="sub" style="font-weight:bold;margin-bottom:6px">${BRAND}</div><h1>${esc(SCHOOL)}</h1><p class="sub">Sign in to open your class sheets.</p>
+ <label>Email</label><input id="l_user" type="email" autocomplete="username"><label>Password</label>${pw("l_pw","current-password")}
+ <div class="chips"><label><input type="checkbox" id="l_keep"> Keep me signed in on this device</label></div><p class="err" id="l_err">${esc(msg||"")}</p><button class="p" id="l_go">Sign in</button>
+ <p class="sub" style="margin-top:14px"><button id="l_forgot">Forgot password</button></p></div>`);
+ const go=async()=>{const set=m=>{$("l_err").textContent=m};set("Signing in…");
+  try{try{await auth.setPersistence($("l_keep").checked?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION)}catch(x){}
+   const c=await auth.signInWithEmailAndPassword($("l_user").value.trim().toLowerCase(),$("l_pw").value);await afterAuth(c.user)}catch(e){set(authErr(e))}};
+ $("l_go").onclick=go;$("l_pw").onkeydown=e=>{if(e.key==="Enter")go()};$("l_forgot").onclick=showForgot}
+function showForgot(){
+ view(`<div class="card auth"><h1>Reset your password</h1><p class="sub">Enter your email address. We'll send you a link to choose a new password.</p>
+ <label>Email</label><input id="f_email" type="email"><p class="err" id="f_err"></p><button class="p" id="f_go">Send reset email</button> <button id="f_back">Back</button></div>`);
+ $("f_back").onclick=()=>showSignin();
+ $("f_go").onclick=async()=>{const e=$("f_email").value.trim().toLowerCase();if(!validEmail(e))return $("f_err").textContent="Enter a valid email address.";
+  try{await auth.sendPasswordResetEmail(e)}catch(x){if(/network/.test((x&&x.code)||""))return $("f_err").textContent="No internet connection."}
+  showSignin("If that email has an account, a reset link is on its way.")}}
+
+// ---------- assessments the signed-in person can open ----------
+const owner=()=>viewing||me;
+function allowedFor(u,a){if(u.role==="admin")return true;if(a.minGrade<=0&&a.maxGrade>=9)return true;const g=gnum(u.grade);return g!=null&&g>=a.minGrade&&g<=a.maxGrade}
+const visibleList=()=>ASSESS.filter(a=>allowedFor(owner(),a)&&(a.status!=="archived"||me.role==="admin"));
+async function loadAssessments(){const s=await db.collection("assessments").get();ASSESS=s.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(a.ord||0)-(b.ord||0))}
+const setWho=()=>{$("who").textContent=viewing?"Viewing "+viewing.name+" · "+(viewing.cls||"no class set")+" · read-only":me.name+" · "+(me.cls||"no class set")+" · "+(me.role==="admin"?"Administrator":"Teacher")};
+function buildNav(){
+ const list=visibleList(),opt=a=>`<option value="${a.id}">${esc(a.name)}${a.status==="closed"?" (closed)":a.status==="archived"?" (archived)":""}</option>`;
+ const cls=list.filter(a=>a.type!=="mock"),mk=list.filter(a=>a.type==="mock");
+ $("assessSel").innerHTML=`<option value="">${list.length?"Choose a sheet…":"No sheets yet"}</option>${cls.length?`<optgroup label="Class tests">${cls.map(opt).join("")}</optgroup>`:""}${mk.length?`<optgroup label="Mock exams">${mk.map(opt).join("")}</optgroup>`:""}`;
+ $("assessSel").onchange=e=>{if(e.target.value)showAssessment(e.target.value)};
+ let b="";
+ if(viewing)b=`<button data-page="back" class="p">← Back to my account</button><span class="vnote">Viewing ${esc(viewing.name)} · read-only</span>`;
+ else if(me.role==="admin")b=`<span class="mlabel">Manage</span><button data-page="overview">Overview</button><button data-page="master">Master sheet</button><button data-page="notes">Notifications <span id="nbadge" class="badge"></span></button><button data-page="assess">Assessments</button><button data-page="teachers">Teachers</button>`;
+ $("tabs").innerHTML=b;$("tabs").hidden=!b;
+ $("tabs").onclick=e=>{const x=e.target.closest("button");if(x&&x.dataset.page)showPage(x.dataset.page)};
+ updateBadge()}
+async function enter(){
+ viewing=null;window.viewOnly=false;$("authPane").hidden=true;$("shell").hidden=false;setSync("");setWho();
+ try{await loadAssessments()}catch(e){ASSESS=[];setSync("Couldn't load the assessments – check the internet.")}
+ buildNav();startWatch();let last=null;try{last=sessionStorage.getItem("bece_last")}catch(e){}
+ const l=visibleList(),first=l.find(a=>a.id===last)||l.find(a=>a.status==="open")||l[0];
+ if(me.role==="admin")showPage(ASSESS.length?"overview":"assess");else if(first)showAssessment(first.id);else showHome()}
+function hidePanes(){["paneMock","paneCt","paneAdmin","paneAcct","paneAssess","paneOverview","paneNotes","paneMaster"].forEach(id=>$(id).hidden=true);$("assist").innerHTML="";$("asBanner").innerHTML=""}
+function mark(page,aid){document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.page===page));const x=$("assessSel");if(x)x.value=aid||"";const u=$("umenu");if(u){u.classList.toggle("on",page==="acct");u.open=false}}
+function showHome(){tok++;hidePanes();mark("","");window.viewOnly=!!viewing;
+ const n=visibleList().length;
+ $("asBanner").innerHTML=n?"<b>Choose a sheet</b> from the “Sheet” list at the top to start.":(viewing?"No sheets are available for this teacher.":me.role==="admin"?"<b>Welcome.</b> Create your first assessments under <b>Manage → Assessments</b>.":"<b>No sheets yet.</b> The administrator needs to create them. Check back soon.")}
+async function showPage(p){
+ tok++;if(p==="back"){viewing=null;window.viewOnly=false;setWho();buildNav();return showPage("overview")}
+ hidePanes();window.viewOnly=!!viewing;mark(p,"");if(viewing)return showHome();
+ const adm=me.role==="admin";
+ if(p==="teachers"&&adm){$("paneAdmin").hidden=false;renderAdmin()}
+ else if(p==="assess"&&adm){$("paneAssess").hidden=false;renderAssess()}
+ else if(p==="master"&&adm){$("paneMaster").hidden=false;renderMaster()}
+  else if(p==="overview"&&adm){$("paneOverview").hidden=false;renderOverview()}
+ else if(p==="notes"&&adm){$("paneNotes").hidden=false;renderNotes()}
+ else if(p==="acct"){$("paneAcct").hidden=false;renderAcct()}else showHome()}
+async function showAssessment(aid){
+ const a=ASSESS.find(x=>x.id===aid),o=owner(),my=++tok;
+ if(!a||!allowedFor(o,a))return showHome();
+ hidePanes();mark("",aid);setSync("Loading…");
+ try{await prefetch(o.uid,aid)}catch(e){if(my===tok){setSync("Can't reach the server – check the internet, then choose the assessment again.")}return}
+ curSum=null;try{const sd=await db.doc(`summaries/${o.uid}__${aid}`).get();if(sd.exists)curSum=sd.data()}catch(e){}
+ if(my!==tok)return;
+ const closed=a.status==="closed"&&me.role!=="admin";window.viewOnly=!!viewing||closed;
+ setSync(viewing?"":dirty.size?"Saving…":"Saved to the cloud");
+ let bn=closed&&!viewing?"This assessment is closed – you can look at it but not change it.":a.status==="archived"?"Archived – hidden from teachers.":a.status==="closed"?"Closed for teachers (you can still edit as administrator).":"";
+ $("asBanner").textContent=bn;
+ const prof={school:SCHOOL,cls:o.cls,teacher:o.name,title:a.name,term:a.term,max:a.max||100,lock:true,subjects:a.type==="mock"?undefined:(a.subjects&&a.subjects.length?a.subjects:undefined),lockSubjects:!!a.lockSubjects};
+ if(a.type==="mock"){$("paneMock").hidden=false;window.mockLoad(o.uid+"__"+aid,prof)}else{$("paneCt").hidden=false;window.ctLoad(o.uid+"__"+aid,prof,1)}
+ renderAssist(a,o);curA=a;if(!viewing)try{sessionStorage.setItem("bece_last",aid)}catch(e){}}
+
+// ---------- submitting a finished sheet ----------
+const fmtDay=ms=>ms?new Date(ms).toLocaleDateString(undefined,{day:"numeric",month:"short"}):"";
+const subBar=()=>{const s=curSum&&curSum.submitted;
+ return `<span class="sstat" id="sub_status">${s?"✔ Submitted on "+esc(fmtDay(curSum.submittedMs))+" – administrator notified":"Not submitted yet"}</span><button class="${s?"":"p"}" id="sub_btn">${s?"Withdraw submission":"Submit to administrator"}</button><span class="sub" id="sub_msg" style="margin:0"></span>`};
+function sheetHead(a,o){
+ const chips=[a.type==="mock"?"Mock exam":"Class test"];if(a.term)chips.push(a.term);if(o.cls)chips.push("Class "+o.cls);if(o.name)chips.push(o.name);if(a.type!=="mock")chips.push("Out of "+(a.max||100));
+ const st=a.status==="open"?'<span class="chip ok">Open</span>':a.status==="closed"?'<span class="chip warn">Closed</span>':'<span class="chip warn">Archived</span>';
+ const sub=curSum&&curSum.submitted,right=window.viewOnly?(sub?`<span class="chip ok">✔ Submitted ${esc(fmtDay(curSum.submittedMs))}</span>`:'<span class="chip">Not submitted</span>'):subBar();
+ return `<div class="card shead"><div><h2>${esc(a.name)}</h2><div>${chips.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}${st}</div></div><div class="statusrow">${right}</div></div>`}
+function missingScores(a,v){try{const d=JSON.parse(v),rows=(d.rows||[]).filter(r=>(r.n||"").trim()||(r.s||[]).some(x=>x!=null));let miss=0;
+ if(a.type==="mock"){const el=d.elig||[1,1,1,0,1,1];rows.forEach(r=>{const s=r.s||[];miss+=[0,1,2,3].filter(i=>s[i]==null).length;const have=el.reduce((n,f,i)=>n+(f&&s[4+i]!=null?1:0),0);if(have<2)miss+=2-have})}
+ else{const show=d.show||[];rows.forEach(r=>(r.s||[]).forEach((x,i)=>{if((show[i]==null?1:show[i])&&x==null)miss++}))}
+ return{rows:rows.length,miss}}catch(e){return{rows:0,miss:0}}}
+let subArm=false,subT=null;
+async function doSubmit(a,o){
+ const btn=$("sub_btn"),say=t=>{$("sub_msg").textContent=t},ref=db.doc(`summaries/${o.uid}__${a.id}`);
+ if(curSum&&curSum.submitted){try{await ref.set({submitted:false},{merge:true});curSum=Object.assign({},curSum,{submitted:false});renderAssist(a,o);$("sub_msg").textContent="Submission withdrawn."}catch(e){say(authErr(e))}return}
+ await flush();const v=window.DS.get(o.uid+"__"+a.id),m=missingScores(a,v||"{}");
+ if(!m.rows){say("Enter at least one learner first.");return}
+ if(!subArm){subArm=true;btn.textContent="Click again to confirm";say(m.miss?`${m.miss} score${m.miss===1?" is":"s are"} still empty. Click again to submit anyway.`:"Click again to submit. The administrator will be notified.");clearTimeout(subT);subT=setTimeout(()=>{subArm=false;const b=$("sub_btn");if(b)b.textContent="Submit to administrator"},5000);return}
+ subArm=false;clearTimeout(subT);say("Submitting…");
+ try{const doc={uid:o.uid,aid:a.id,n:m.rows,submitted:true,submittedAt:ts(),submittedMs:Date.now(),tname:o.name,aname:a.name};await ref.set(doc,{merge:true});
+  curSum=Object.assign({},curSum||{},{submitted:true,submittedMs:doc.submittedMs});renderAssist(a,o);$("sub_msg").textContent="Submitted. The administrator has been notified."}
+ catch(e){say(authErr(e))}}
+
+// ---------- administrator notifications ----------
+let SUBS=[],known=new Map(),firstSnap=true,unsub=null;
+const unread=()=>SUBS.filter(x=>x.submittedMs>((me&&me.seenMs)||0)&&x.uid!==(me&&me.uid)).length;
+function updateBadge(){const n=unread(),b=$("nbadge");if(b)b.textContent=n?String(n):""}
+function startWatch(){stopWatch();if(!me||me.role!=="admin")return;firstSnap=true;known=new Map();
+ try{unsub=db.collection("summaries").onSnapshot(snap=>{const arr=[];snap.docs.forEach(d=>{const x=d.data();if(x.submitted&&x.submittedMs)arr.push(Object.assign({id:d.id},x))});
+  if(!firstSnap)arr.forEach(x=>{if(x.submittedMs>(known.get(x.id)||0)&&x.uid!==me.uid){const t=`${x.tname||"A teacher"} submitted ${x.aname||"a sheet"}`;toast("🔔 "+t,()=>showPage("notes"));sysNotify("Sheet submitted",t)}});
+  arr.forEach(x=>known.set(x.id,x.submittedMs));firstSnap=false;SUBS=arr.sort((a,b)=>b.submittedMs-a.submittedMs);updateBadge()},()=>{})}catch(e){}}
+function stopWatch(){if(unsub){try{unsub()}catch(e){}unsub=null}SUBS=[]}
+function renderNotes(){
+ const seen=me.seenMs||0,fmt=ms=>{const d=new Date(ms);return d.toLocaleDateString(undefined,{day:"numeric",month:"short"})+", "+d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})};
+ const rows=SUBS.slice(0,40).map(x=>`<tr${x.submittedMs>seen&&x.uid!==me.uid?' style="font-weight:bold"':""}><td>${x.submittedMs>seen&&x.uid!==me.uid?"● ":""}${esc(x.tname||"Teacher")}</td><td>${esc(x.aname||x.aid)}</td><td>${x.n} learner${x.n===1?"":"s"}</td><td>${esc(fmt(x.submittedMs))}</td><td><button data-uid="${x.uid}" data-aid="${x.aid}">View sheet</button></td></tr>`).join("")||'<tr><td colspan="5">No submissions yet.</td></tr>';
+ $("paneNotes").innerHTML=`<h1>Notifications</h1><p class="sub">A teacher clicks "Submit to administrator" when their master sheet is complete. An alert pops up while this app is open; anything submitted while it was closed is listed here the next time you sign in.</p>
+ <div class="card" style="overflow:auto"><table class="adm"><thead><tr><th>Teacher</th><th>Sheet</th><th>Entered</th><th>Submitted</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+ <div class="bar">${window.Notification&&Notification.permission==="default"?'<button id="nt_en">Turn on desktop alerts</button>':""}</div>`;
+ $("paneNotes").onclick=async ev=>{const b=ev.target.closest("button");if(!b)return;
+  if(b.id==="nt_en"){try{await Notification.requestPermission()}catch(e){}return renderNotes()}
+  if(!b.dataset.uid)return;if(!USERS.length){try{await fetchUsers()}catch(e){}}const u=USERS.find(x=>x.uid===b.dataset.uid);if(u)viewTeacher(u,b.dataset.aid)};
+ me.seenMs=Date.now();try{db.doc("users/"+me.uid).update({seenMs:me.seenMs}).catch(()=>{})}catch(e){}updateBadge()}
+
+// ---------- quick ways to add learners ----------
+function renderAssist(a,o){
+ if(window.viewOnly){$("assist").innerHTML=sheetHead(a,o);return}
+ const others=visibleList().filter(x=>x.id!==a.id);
+ $("assist").innerHTML=sheetHead(a,o)+`<details class="card fold"><summary>＋ Add learners quickly <span class="sub">(paste a class list, or copy names from another sheet)</span></summary><div class="grid" style="margin-top:8px">
+ <div><label>Copy the learner names from another sheet of yours</label><select id="as_from"><option value="">Choose a sheet…</option>${others.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select> <button id="as_copy" style="margin-top:6px">Copy names</button></div>
+ <div><label>Paste a class list (one name per line, for example copied from Excel)</label><textarea id="as_paste" rows="4"></textarea><button id="as_add" style="margin-top:6px">Add names</button></div></div>
+ <p class="sub" id="as_msg">Names are added without scores. Existing learners are never duplicated.</p></details>`;
+ const imp=names=>a.type==="mock"?window.mockImportNames(names):window.ctImportNames(names),say=t=>{$("as_msg").textContent=t};
+ $("as_copy").onclick=async()=>{const id=$("as_from").value;if(!id)return say("Choose a sheet first.");
+  try{await prefetch(o.uid,id);const v=window.DS.get(o.uid+"__"+id);if(!v)return say("That sheet is empty.");
+   const names=JSON.parse(v).rows.map(r=>r.n).filter(n=>n&&n.trim());const n=imp(names);say(n?`Added ${n} name${n===1?"":"s"}.`:"No new names to add.")}
+  catch(e){say("Couldn't read that sheet.")}};
+ $("as_add").onclick=()=>{const names=$("as_paste").value.split(/\r?\n/).map(l=>l.split("\t")[0].replace(/^\s*\d+[.)]?\s+/,"").trim()).filter(Boolean);
+  if(!names.length)return say("Paste some names first.");const n=imp(names);$("as_paste").value="";say(n?`Added ${n} name${n===1?"":"s"}.`:"No new names to add.")};
+ $("sub_btn").onclick=()=>doSubmit(a,o)}
+
+// ---------- administrator: teachers ----------
+const activeAdmins=()=>USERS.filter(u=>u.role==="admin"&&u.active!==false).length;
+async function fetchUsers(){const s=await db.collection("users").get();USERS=s.docs.map(d=>Object.assign({uid:d.id},d.data())).sort((a,b)=>String(a.name).localeCompare(String(b.name)))}
+async function renderAdmin(){
+ $("paneAdmin").innerHTML='<p class="sub">Loading teachers…</p>';
+ try{await fetchUsers()}catch(e){$("paneAdmin").innerHTML='<p class="err">Couldn\'t load teachers: '+esc(authErr(e))+"</p>";return}
+ const rows=USERS.map(u=>`<tr${u.active===false?' style="opacity:.55"':""}><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${u.role==="admin"?"Administrator":"Teacher"}${u.active===false?" (inactive)":""}</td><td>${esc(u.cls||"–")}</td><td>${gradeLabel(u.grade)}</td><td style="white-space:nowrap">${u.uid===me.uid?"":`<button data-a="view" data-id="${u.uid}">View sheets</button> `}<button data-a="edit" data-id="${u.uid}">Edit</button> <button data-a="reset" data-id="${u.uid}">Reset password</button>${u.uid===me.uid?"":` <button data-a="act" data-id="${u.uid}">${u.active===false?"Reactivate":"Deactivate"}</button>`}</td></tr>`).join("");
+ const e=ed||{name:"",email:"",cls:"",grade:"",role:"teacher"};
+ $("paneAdmin").innerHTML=`<h1>Teachers</h1><p class="sub">Give each class teacher a login. A teacher sees only their own sheets, and only the assessments that are open to their grade (set under Assessments). "View sheets" lets you read a teacher's data (read-only). "Deactivate" blocks a teacher's sign-in but keeps their data.</p>
+ <div class="card" style="overflow:auto"><table class="adm"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Class</th><th>Grade</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+ <details class="card fold" ${ed?"open":""}><summary><b>${ed?"Edit teacher":"＋ Add a teacher"}</b> <span class="err" id="adm_msg">${esc(notice)}</span></summary>
+ <div class="grid" style="margin-top:8px"><div><label>Full name (printed on the sheet)</label><input id="ed_name" value="${esc(e.name)}"></div>
+ <div><label>Email address (their login)</label><input id="ed_user" value="${esc(e.email)}" ${ed?"readonly":""}></div>
+ ${ed?"":'<div><label>Starting password (at least 6 characters)</label><input id="ed_pw" type="text" autocomplete="off"></div>'}
+ <div><label>Class</label><input id="ed_cls" value="${esc(e.cls)}" placeholder="e.g. 7 PRIMROSE"></div>
+ <div><label>Grade (decides which assessments they can open)</label><select id="ed_grade">${gradeOpts(e.grade)}</select></div></div>
+ <div class="chips"><label><input type="checkbox" id="ed_admin" ${e.role==="admin"?"checked":""}> Administrator (can manage everything and open every assessment)</label></div>
+ <div class="bar" style="margin-top:10px"><button class="p" id="ed_save">${ed?"Save changes":"Add teacher"}</button>${ed?'<button id="ed_cancel">Cancel</button>':""}</div></details>
+ <details class="card fold"><summary><b>Backup</b> <span id="bk_msg" class="sub"></span></summary><p class="sub" style="margin-top:8px">Save a copy of every teacher's sheets to a file. The data is also stored safely in your Firebase project.</p><div class="bar"><button id="bk_export">Export all sheets</button></div></details>`;
+ notice="";$("ed_save").onclick=saveEd;if(ed)$("ed_cancel").onclick=()=>{ed=null;renderAdmin()};
+ $("paneAdmin").onclick=ev=>{const b=ev.target.closest("button[data-a]");if(!b)return;const u=USERS.find(x=>x.uid===b.dataset.id);if(!u)return;
+  if(b.dataset.a==="view")return viewTeacher(u);
+  if(b.dataset.a==="edit"){ed=u;renderAdmin();return}
+  if(b.dataset.a==="reset")return auth.sendPasswordResetEmail(u.email).then(()=>{notice="Reset email sent to "+u.email+".";renderAdmin()},x=>{notice=authErr(x);renderAdmin()});
+  if(b.dataset.a==="act")return setActive(u)};
+ $("bk_export").onclick=async()=>{$("bk_msg").textContent="Collecting…";$("bk_msg").textContent=await exportAll()}}
+async function setActive(u){
+ const on=u.active===false;
+ if(!on&&u.role==="admin"&&activeAdmins()<2){notice="There must be at least one active administrator.";return renderAdmin()}
+ try{await db.doc("users/"+u.uid).update({active:on});notice=(on?"Reactivated ":"Deactivated ")+u.name+"."}catch(e){notice=authErr(e)}renderAdmin()}
+async function saveEd(){
+ const m=t=>{$("adm_msg").textContent=t},name=$("ed_name").value.trim(),email=$("ed_user").value.trim().toLowerCase(),cls=$("ed_cls").value.trim(),grade=$("ed_grade").value,adm=$("ed_admin").checked;
+ if(!name)return m("Enter the teacher's full name.");
+ if(!adm&&!grade)return m("Choose the teacher's grade.");
+ try{
+  if(ed){if(!adm&&ed.role==="admin"&&activeAdmins()<2)return m("There must be at least one active administrator.");
+   await db.doc("users/"+ed.uid).update({name,cls,grade,role:adm?"admin":"teacher"});
+   if(ed.uid===me.uid){Object.assign(me,{name,cls,grade,role:adm?"admin":"teacher"});setWho()}notice="Saved changes for "+name+".";ed=null}
+  else{const pw=$("ed_pw").value;if(!validEmail(email))return m("Enter a valid email address.");if(pw.length<6)return m("Password must be at least 6 characters.");
+   m("Creating…");const c=await sec.auth().createUserWithEmailAndPassword(email,pw);const uid=c.user.uid;try{await sec.auth().signOut()}catch(x){}
+   await db.doc("users/"+uid).set({name,email,role:adm?"admin":"teacher",cls,grade,active:true,createdAt:ts()});
+   notice="Added "+name+". Give them their email and starting password; they can change it under My account."}
+ }catch(e){return m(authErr(e))}
+ renderAdmin()}
+function viewTeacher(u,aid){
+ viewing=u;window.viewOnly=true;setWho();buildNav();
+ const l=visibleList(),t=(aid&&l.find(a=>a.id===aid))||l[0];
+ if(t)showAssessment(t.id);else{hidePanes();$("asBanner").textContent="No sheets are available for this teacher."}}
+
+// ---------- administrator: assessments ----------
+const typeLabel=a=>a.type==="mock"?"Mock exam (BECE aggregate)":"Class test (total and position) · "+((a.subjects&&a.subjects.length)||STD.length)+" subjects";
+const statusLabel=a=>a.status==="closed"?"Closed (view only)":a.status==="archived"?"Archived (hidden)":"Open";
+function renderAssess(){
+ const rows=ASSESS.map(a=>`<tr${a.status==="archived"?' style="opacity:.55"':""}><td>${esc(a.name)}</td><td>${typeLabel(a)}</td><td>${esc(a.term||"–")}</td><td>${rangeLabel(a)}</td><td>${statusLabel(a)}</td><td style="white-space:nowrap"><button data-a="edit" data-id="${a.id}">Edit</button> <button data-a="dup" data-id="${a.id}">Duplicate</button> <button data-a="close" data-id="${a.id}">${a.status==="closed"?"Reopen":"Close"}</button> <button data-a="arch" data-id="${a.id}">${a.status==="archived"?"Restore":"Archive"}</button> <button data-a="del" data-id="${a.id}" title="Delete this assessment and everyone's scores for it">Delete</button></td></tr>`).join("")||`<tr><td colspan="6">No assessments yet. Add the standard set below to get started.</td></tr>`;
+ const e=aed||{name:"",type:"class",term:"",max:100,minGrade:0,maxGrade:9,status:"open"},subsText=((e.subjects&&e.subjects.length)?e.subjects:STD).join(", ");
+ $("paneAssess").innerHTML=`<h1>Assessments</h1><p class="sub">Create the class tests and mock exams teachers will use. A <b>class test</b> adds the subject scores into a total and ranks the learners. A <b>mock exam</b> uses the BECE aggregate (4 core subjects plus the best 2 electives). Teachers only see the assessments open to their grade.</p>
+ <div class="card" style="overflow:auto"><table class="adm"><thead><tr><th>Name</th><th>Type</th><th>Term</th><th>Open to</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+ <details class="card fold" ${ASSESS.length?"":"open"}><summary><b>New term in one click</b> <span class="err" id="pr_msg">${esc(anotice)}</span></summary>
+ <div class="bar" style="margin-top:8px"><input id="pr_term" placeholder="Term / year, e.g. FIRST TERM (2026/2027)" style="min-width:280px"><button class="p" id="pr_go">Add Class Test 1, 2, 3 and a Mock Exam</button></div>
+ <p class="sub">Mock exams are made open to Grade 9 only. Class tests are open to all grades. You can change either afterwards.</p></details>
+ <details class="card fold" ${aed?"open":""}><summary><b>${aed?"Edit assessment":"＋ Create an assessment"}</b> <span class="err" id="ad_msg"></span></summary>
+ <div class="grid" style="margin-top:8px"><div><label>Name</label><input id="ad_name" value="${esc(e.name)}" placeholder="e.g. Class Test 4, Mock 2, End of Term Exam"></div>
+ <div><label>Type (decides the calculation)</label><select id="ad_type" ${aed?"disabled":""}><option value="class" ${e.type!=="mock"?"selected":""}>Class test – total and position</option><option value="mock" ${e.type==="mock"?"selected":""}>Mock exam – BECE aggregate</option></select></div>
+ <div><label>Term / year (printed on the sheet)</label><input id="ad_term" value="${esc(e.term)}" placeholder="FIRST TERM (2026/2027)"></div>
+ <div><label>Scores are out of (class tests)</label><input id="ad_max" type="number" min="1" value="${e.max||100}"></div>
+ <div><label>Open to grades from</label><select id="ad_min">${gOpts(e.minGrade)}</select></div>
+ <div><label>to</label><select id="ad_maxg">${gOpts(e.maxGrade)}</select></div>
+ <div><label>Status</label><select id="ad_status"><option value="open" ${e.status==="open"?"selected":""}>Open – teachers can enter scores</option><option value="closed" ${e.status==="closed"?"selected":""}>Closed – teachers can only look</option><option value="archived" ${e.status==="archived"?"selected":""}>Archived – hidden from teachers</option></select></div>
+ <div id="ad_subwrap" style="grid-column:1/-1;${e.type==="mock"?"display:none":""}"><label>Subjects on this class test (separate with commas)</label><input id="ad_subs" value="${esc(subsText)}">
+ <div class="bar" style="margin-top:6px"><input id="ad_addsub" placeholder="Add a subject, e.g. ICT" style="width:210px"><button id="ad_addbtn">Add subject</button><button id="ad_stdbtn">Reset to the standard 10</button><span class="sub" id="ad_subcount"></span></div>
+ <div class="chips"><label><input type="checkbox" id="ad_locksubs" ${e.lockSubjects?"checked":""}> Teachers can't change the subjects. Leave this off to let each teacher add, rename or remove subjects on their own sheet. Tick it to make this list final for everyone, including sheets already started.</label></div></div></div>
+ <div class="bar" style="margin-top:10px"><button class="p" id="ad_save">${aed?"Save changes":"Create assessment"}</button>${aed?'<button id="ad_cancel">Cancel</button>':""}</div></details>`;
+ anotice="";
+ $("ad_type").onchange=ev=>{if(aed)return;const m=ev.target.value==="mock";$("ad_min").value=m?9:0;$("ad_maxg").value=9;$("ad_max").disabled=m;$("ad_subwrap").style.display=m?"none":""};
+ const cnt=()=>{const l=normSubs($("ad_subs").value);$("ad_subcount").textContent=l.length+" subject"+(l.length===1?"":"s")};cnt();$("ad_subs").oninput=cnt;
+ $("ad_addbtn").onclick=()=>{const l=normSubs($("ad_subs").value+","+$("ad_addsub").value);$("ad_subs").value=l.join(", ");$("ad_addsub").value="";cnt()};
+ $("ad_addsub").onkeydown=ev=>{if(ev.key==="Enter"){ev.preventDefault();$("ad_addbtn").onclick()}};
+ $("ad_stdbtn").onclick=()=>{$("ad_subs").value=STD.join(", ");cnt()};
+ $("pr_go").onclick=presetSet;$("ad_save").onclick=saveAssess;if(aed)$("ad_cancel").onclick=()=>{aed=null;renderAssess()};
+ $("paneAssess").onclick=ev=>{const b=ev.target.closest("button[data-a]");if(!b)return;const a=ASSESS.find(x=>x.id===b.dataset.id);if(!a)return;
+  if(b.dataset.a==="edit"){aed=a;renderAssess();return}
+  if(b.dataset.a==="dup")return dupAssess(a);
+  if(b.dataset.a==="del")return delAssess(a,b);
+  setStatus(a,b.dataset.a==="close"?(a.status==="closed"?"open":"closed"):(a.status==="archived"?"open":"archived"))}}
+async function refreshAssess(note){anotice=note||"";try{await loadAssessments()}catch(e){}buildNav();renderAssess()}
+const nameTaken=(n,id)=>ASSESS.some(a=>a.id!==id&&a.status!=="archived"&&String(a.name).trim().toLowerCase()===n.trim().toLowerCase());
+async function addAssess(f,k){const r=db.collection("assessments").doc();await r.set(Object.assign({},f,{ord:Date.now()+(k||0),createdAt:ts()}))}
+async function presetSet(){
+ const term=$("pr_term").value.trim(),m=t=>{$("pr_msg").textContent=t};if(!term)return m("Type the term first.");
+ const names=["Class Test 1","Class Test 2","Class Test 3"].filter(n=>!nameTaken(n,null)),mock=!nameTaken("Mock Exam",null);
+ if(!names.length&&!mock)return m("Those assessments already exist.");
+ try{let k=0;for(const n of names)await addAssess({name:n,type:"class",term,max:100,minGrade:0,maxGrade:9,status:"open",subjects:STD.slice(),lockSubjects:false},k++);
+  if(mock)await addAssess({name:"Mock Exam",type:"mock",term,max:100,minGrade:9,maxGrade:9,status:"open"},k++)}catch(e){return m(authErr(e))}
+ refreshAssess("Added "+(names.length+(mock?1:0))+" assessments for "+term+".")}
+async function saveAssess(){
+ const m=t=>{$("ad_msg").textContent=t},name=$("ad_name").value.trim(),type=aed?aed.type:$("ad_type").value,term=$("ad_term").value.trim(),max=+$("ad_max").value,minGrade=+$("ad_min").value,maxGrade=+$("ad_maxg").value,status=$("ad_status").value;
+ if(!name)return m("Enter a name.");if(minGrade>maxGrade)return m("'From' grade must not be higher than 'to' grade.");
+ if(type==="class"&&!(max>0))return m("Enter what the scores are out of.");
+ if(nameTaken(name,aed&&aed.id))return m("An assessment with that name already exists.");
+ const f={name,type,term,max:type==="mock"?100:max,minGrade,maxGrade,status};
+ if(type==="class"){const subs=normSubs($("ad_subs").value),er=subsError(subs);if(er)return m(er);f.subjects=subs;f.lockSubjects=$("ad_locksubs").checked}
+ try{if(aed){await db.doc("assessments/"+aed.id).update(f);const n=name;aed=null;return refreshAssess("Saved "+n+".")}
+  await addAssess(f,0);refreshAssess("Created "+name+".")}catch(e){m(authErr(e))}}
+async function dupAssess(a){
+ let nm=/\d+\s*$/.test(a.name)?a.name.replace(/(\d+)\s*$/,(x,n)=>String(+n+1)):a.name+" (copy)";while(nameTaken(nm,null))nm+=" (copy)";
+ const f={name:nm,type:a.type,term:a.term||"",max:a.max||100,minGrade:a.minGrade,maxGrade:a.maxGrade,status:"open"};if(a.type!=="mock"){f.subjects=a.subjects&&a.subjects.length?a.subjects:STD.slice();f.lockSubjects=!!a.lockSubjects}
+ try{await addAssess(f,0)}catch(e){return refreshAssess(authErr(e))}
+ refreshAssess("Created "+nm+" from "+a.name+". Edit it if the details differ.")}
+let delArm=null,delT=null;
+async function delAssess(a,b){
+  const say=t=>{const m=$("pr_msg");if(m)m.textContent=t};
+  if(delArm!==a.id){delArm=a.id;b.textContent="Click again to delete";b.style.color="#d62828";clearTimeout(delT);
+   delT=setTimeout(()=>{delArm=null;if(b.isConnected){b.textContent="Delete";b.style.color=""}},6000);
+   say(`Deleting "${a.name}" permanently removes it and every teacher's scores for it. To keep the scores, use Archive instead. Click Delete again to confirm.`);return}
+  delArm=null;clearTimeout(delT);b.disabled=true;say("Deleting…");
+  try{if(!USERS.length)await fetchUsers();
+   const refs=[];USERS.forEach(u=>{refs.push(db.doc(`users/${u.uid}/sheets/${a.id}`),db.doc(`summaries/${u.uid}__${a.id}`))});
+   for(let i=0;i<refs.length;i+=400){const bt=db.batch();refs.slice(i,i+400).forEach(r=>bt.delete(r));await bt.commit()}
+   await db.doc("assessments/"+a.id).delete()}
+  catch(e){b.disabled=false;b.textContent="Delete";b.style.color="";return say(authErr(e))}
+  USERS.forEach(u=>{const k=u.uid+"__"+a.id;cache.delete(k);dirty.delete(k)});
+  if(aed&&aed.id===a.id)aed=null;if(MST.aid===a.id){MST.aid="";MST.loaded=false}
+  refreshAssess("Deleted "+a.name+".")}
+async function setStatus(a,status){try{await db.doc("assessments/"+a.id).update({status})}catch(e){return refreshAssess(authErr(e))}refreshAssess(a.name+": "+statusLabel({status}).toLowerCase()+".")}
+
+// ---------- administrator: overview ----------
+async function renderOverview(){
+ const my=tok;$("paneOverview").innerHTML='<p class="sub">Loading overview…</p>';const sums=new Map();
+ try{await fetchUsers();const s=await db.collection("summaries").get();s.docs.forEach(d=>sums.set(d.id,d.data()))}
+ catch(e){$("paneOverview").innerHTML='<p class="err">Couldn\'t load the overview: '+esc(authErr(e))+"</p>";return}
+ if(my!==tok)return;
+ const ms=t=>t&&t.toDate?t.toDate().getTime():0,dt=m=>m?new Date(m).toLocaleDateString(undefined,{day:"numeric",month:"short"}):"";
+ const list=ASSESS.filter(a=>a.status!=="archived"),teachers=USERS.filter(u=>u.active!==false),S=(u,a)=>sums.get(u.uid+"__"+a.id)||{};
+ const head=list.map(a=>{const ok=teachers.filter(u=>allowedFor(u,a));return `<th>${esc(a.name)}<br><span style="font-weight:normal">${ok.filter(u=>S(u,a).n>0).length} of ${ok.length} started · ${ok.filter(u=>S(u,a).submitted).length} submitted${a.status==="closed"?" · closed":""}</span></th>`}).join("");
+ const rows=teachers.map(u=>`<tr><td class="n"><b>${esc(u.name)}</b><br><span style="color:var(--mu)">${esc(u.cls||"no class")} · ${gradeLabel(u.grade)}</span></td>${list.map(a=>{
+   if(!allowedFor(u,a))return '<td class="na">–</td>';const s=S(u,a),at=`data-uid="${u.uid}" data-aid="${a.id}"`;
+   if(s.submitted)return `<td class="hit" ${at}><b style="color:var(--ok)">✔ Submitted</b><br>${s.n} learner${s.n===1?"":"s"} · ${esc(dt(s.submittedMs))}${ms(s.updatedAt)>s.submittedMs+1500?'<br><span style="color:#e0a800">edited since</span>':""}</td>`;
+   return s.n>0?`<td class="hit" ${at}><b>${s.n}</b> learner${s.n===1?"":"s"}<br>${esc(dt(ms(s.updatedAt)))}</td>`:`<td class="hit" ${at} style="color:var(--mu)">not started</td>`}).join("")}</tr>`).join("");
+ $("paneOverview").innerHTML=`<h1>Overview</h1><p class="sub">Who has entered what. Click a cell to read that teacher's sheet (read-only). "–" means the assessment isn't open to that teacher's grade.</p>
+ <div class="card" style="overflow:auto">${list.length&&teachers.length?`<table class="ov"><thead><tr><th class="n">Teacher</th>${head}</tr></thead><tbody>${rows}</tbody></table>`:'<p class="sub">Create some assessments and add teachers to see them here.</p>'}</div>`;
+ $("paneOverview").onclick=ev=>{const c=ev.target.closest("td[data-uid]");if(!c)return;const u=USERS.find(x=>x.uid===c.dataset.uid);if(u)viewTeacher(u,c.dataset.aid)}}
+
+// ---------- administrator: grade master sheet ----------
+const MST={aid:"",grade:null,cls:"all",sort:"pos",excl:null,elig:null,teams:[],loaded:false};
+const MSUB=["ENG","MATH","SCI.","SOC. STUD.","RME","COMP","FRE","C. ARTS","TWI","C. TECH"];
+const mGrade=s=>s==null?9:s>=90?1:s>=80?2:s>=70?3:s>=60?4:s>=55?5:s>=50?6:s>=40?7:s>=35?8:9;
+const fix1=v=>Math.round(v*10)/10;
+const ordn=n=>n+(n%100>=11&&n%100<=13?"th":(["th","st","nd","rd"][n%10]||"th"));
+const mAss=()=>ASSESS.find(a=>a.id===MST.aid);
+const mTeachers=g=>USERS.filter(u=>u.active!==false&&gnum(u.grade)===g&&(u.role!=="admin"||(u.cls||"").trim())).sort((a,b)=>String(a.cls||"").localeCompare(String(b.cls||""),undefined,{numeric:true}));
+function mPickGrade(){const a=mAss(),lo=Math.max(0,a.minGrade||0),hi=Math.min(9,a.maxGrade==null?9:a.maxGrade);
+  if(MST.grade!=null&&MST.grade>=lo&&MST.grade<=hi)return;
+  const mk=a.type==="mock";for(let k=lo;k<=hi;k++){const g=mk?hi-(k-lo):k;if(mTeachers(g).length){MST.grade=g;return}}MST.grade=mk?hi:lo}
+const mMsg=t=>{const m=$("ms_msg");if(m)m.textContent=t};
+async function renderMaster(){
+  const my=tok,pane=$("paneMaster"),L=ASSESS.filter(a=>a.status!=="archived");
+  if(!L.length){pane.innerHTML='<h1>Grade Master Sheet</h1><p class="sub">Create an assessment first (Assessments page), then come back here.</p>';return}
+  pane.innerHTML='<p class="sub">Loading…</p>';
+  try{await fetchUsers()}catch(e){pane.innerHTML='<p class="err">Couldn\'t load the teachers: '+esc(authErr(e))+"</p>";return}
+  if(my!==tok)return;
+  if(!MST.aid||!L.some(a=>a.id===MST.aid)){MST.aid=(L.find(a=>a.status==="open")||L[0]).id;MST.grade=null;MST.excl=null;MST.elig=null}
+  mPickGrade();
+  const opt=a=>`<option value="${a.id}" ${a.id===MST.aid?"selected":""}>${esc(a.name)}${a.term?" · "+esc(a.term):""}</option>`;
+  pane.innerHTML=`<h1>Grade Master Sheet</h1><p class="sub">Brings the learners of one grade from every class onto one sheet and ranks them against each other. Each learner's class is shown beside the name. The sheets come straight from the class teachers, so press Refresh to pick up their latest scores.</p>
+  <div class="card"><div class="bar"><label style="color:var(--mu)">Assessment</label><select id="ms_a">${L.map(opt).join("")}</select>
+  <label style="color:var(--mu);margin-left:8px">Grade</label><select id="ms_g"></select>
+  <label style="color:var(--mu);margin-left:8px">Class</label><select id="ms_c"></select>
+  <label style="color:var(--mu);margin-left:8px">Sort by</label><select id="ms_s"><option value="pos">Position (best first)</option><option value="cls">Class, then position</option><option value="name">Name (A–Z)</option></select></div>
+  <div class="bar" style="margin-top:10px"><button id="ms_subBtn" class="subbtn" data-open="ms_dlg">⚙ Subjects <span id="ms_subsum"></span></button>
+  <button id="ms_reload">Refresh from teachers</button><button class="p" id="ms_pdf">Download PDF</button><button id="ms_csv">Download CSV</button><span id="ms_msg" class="sub"></span></div></div>
+  <div id="ms_status"></div><div id="ms_out"></div>
+  <dialog id="ms_dlg" class="dlg"><div class="dh"><h2>Subjects</h2><button class="dclose" data-close aria-label="Close">×</button></div>
+  <div class="db" id="ms_chips"></div><div class="df"><button class="p" data-close>Done</button></div></dialog>`;
+  mFillGrade();$("ms_s").value=MST.sort;
+  $("ms_a").onchange=e=>{MST.aid=e.target.value;MST.grade=null;MST.cls="all";MST.excl=null;MST.elig=null;mPickGrade();mFillGrade();loadMaster()};
+  $("ms_g").onchange=e=>{MST.grade=+e.target.value;MST.cls="all";MST.excl=null;MST.elig=null;loadMaster()};
+  $("ms_c").onchange=e=>{MST.cls=e.target.value;drawMaster()};
+  $("ms_s").onchange=e=>{MST.sort=e.target.value;drawMaster()};
+  $("ms_reload").onclick=loadMaster;$("ms_pdf").onclick=masterPdf;$("ms_csv").onclick=masterCsv;
+  $("ms_chips").onchange=e=>{const t=e.target;
+    if(t.dataset.sj!=null){const n=t.dataset.sj;const ex=new Set(MST.excl||[]);t.checked?ex.delete(n):ex.add(n);MST.excl=[...ex]}
+    else if(t.dataset.el!=null){const el=(MST.elig||[1,1,1,0,1,1]).slice();el[+t.dataset.el]=t.checked?1:0;MST.elig=el}
+    drawMaster()};
+  await loadMaster()}
+function mFillGrade(){const a=mAss(),lo=Math.max(0,a.minGrade||0),hi=Math.min(9,a.maxGrade==null?9:a.maxGrade);let h="";
+  for(let g=lo;g<=hi;g++)h+=`<option value="${g}" ${g===MST.grade?"selected":""}>${gl(g)}</option>`;$("ms_g").innerHTML=h}
+async function loadMaster(){
+  const my=tok,a=mAss();if(!a)return;mMsg("Loading…");
+  try{try{await flush()}catch(e){}
+    const us=mTeachers(MST.grade);
+    const res=await Promise.all(us.map(async u=>{
+      const d=await db.doc(`users/${u.uid}/sheets/${a.id}`).get();let sheet=null;
+      if(d.exists){try{const v=d.data().data;sheet=typeof v==="string"?JSON.parse(v):v}catch(e){sheet=null}}
+      let sub=false;try{const sd=await db.doc(`summaries/${u.uid}__${a.id}`).get();sub=!!(sd.exists&&sd.data().submitted)}catch(e){}
+      return{u,sheet,sub}}));
+    if(my!==tok)return;MST.teams=res;MST.loaded=true;mMsg("");drawMaster()}
+  catch(e){if(my===tok)mMsg("Couldn't load: "+authErr(e))}}
+function computeMaster(){
+  const a=mAss(),mock=a.type==="mock",T=MST.teams.map(t=>({t,rows:((t.sheet&&t.sheet.rows)||[]).filter(r=>(r.n||"").trim()||(r.s||[]).some(x=>x!=null))}));
+  const out={mock,subs:[],inc:[],rows:[],elig:null,max:a.max||100};
+  if(mock){
+    out.subs=MSUB.slice();out.inc=MSUB.map((_,i)=>i);
+    let el=MST.elig;if(!el){const f=T.find(x=>x.t.sheet&&Array.isArray(x.t.sheet.elig));el=f?f.t.sheet.elig.slice(0,6):[1,1,1,0,1,1]}
+    while(el.length<6)el.push(0);out.elig=el;
+    T.forEach(x=>x.rows.forEach(r=>{
+      const s=MSUB.map((_,i)=>r.s&&r.s[i]!=null?+r.s[i]:null),core=s.slice(0,4),e=[];
+      for(let i=4;i<10;i++)if(el[i-4])e.push({i,v:s[i]==null?0:s[i]});
+      e.sort((p,q)=>q.v-p.v||p.i-q.i);const top=e.slice(0,2);
+      const gs=core.map(mGrade).concat(top.map(t=>mGrade(t.v)));while(gs.length<6)gs.push(9);
+      out.rows.push({name:(r.n||"").trim(),cls:x.t.u.cls||x.t.u.name,uid:x.t.u.uid,s,ranked:s.some(v=>v!=null),
+        raw:core.reduce((p,v)=>p+(v||0),0)+top.reduce((p,t)=>p+t.v,0),agg:gs.reduce((p,v)=>p+v,0),ones:gs.filter(g=>g===1).length,cnt:top.map(t=>t.i)})}));
+    const better=(y,x)=>y.agg<x.agg||(y.agg===x.agg&&y.raw>x.raw);
+    out.rows.forEach(x=>{if(!x.ranked)return;const rk=out.rows.filter(y=>y.ranked);x.pos=1+rk.filter(y=>better(y,x)).length;x.cpos=1+rk.filter(y=>y.uid===x.uid&&better(y,x)).length})
+  }else{
+    const names=[],add=n=>{n=String(n||"").trim().toUpperCase();if(n&&!names.includes(n))names.push(n)};
+    (a.subjects||[]).forEach(add);T.forEach(x=>x.t.sheet&&(x.t.sheet.subs||[]).forEach(add));if(!names.length)STD.forEach(add);
+    if(MST.excl==null)MST.excl=names.filter(n=>{const f=[];T.forEach(x=>{const sh=x.t.sheet;if(!sh||!sh.subs)return;const k=sh.subs.findIndex(y=>String(y).toUpperCase()===n);if(k>=0)f.push(sh.show&&sh.show[k]!=null?sh.show[k]:1)});return f.length&&f.every(v=>!v)});
+    out.subs=names;out.inc=names.map((_,i)=>i).filter(i=>!MST.excl.includes(names[i]));
+    T.forEach(x=>{const sh=x.t.sheet,idx=((sh&&sh.subs)||[]).map(y=>String(y).toUpperCase());
+      x.rows.forEach(r=>{const s=names.map(n=>{const k=idx.indexOf(n),v=k<0||!r.s?null:r.s[k];return v==null?null:+v});
+        out.rows.push({name:(r.n||"").trim(),cls:x.t.u.cls||x.t.u.name,uid:x.t.u.uid,s,ranked:s.some(v=>v!=null),total:fix1(out.inc.reduce((p,i)=>p+(s[i]||0),0))})})});
+    out.rows.forEach(x=>{if(!x.ranked)return;const rk=out.rows.filter(y=>y.ranked);x.pos=1+rk.filter(y=>y.total>x.total).length;x.cpos=1+rk.filter(y=>y.uid===x.uid&&y.total>x.total).length})
+  }
+  out.rows.forEach((x,i)=>x.i=i);return out}
+function masterView(M){
+  let L=M.rows.filter(x=>MST.cls==="all"||x.uid===MST.cls);
+  const nm=(x,y)=>(!x.name-!y.name)||x.name.localeCompare(y.name),pp=(x,y)=>((y.ranked?1:0)-(x.ranked?1:0))||((x.pos||0)-(y.pos||0))||nm(x,y);
+  L=L.slice().sort(MST.sort==="name"?(x,y)=>nm(x,y)||x.i-y.i:MST.sort==="cls"?(x,y)=>String(x.cls).localeCompare(String(y.cls),undefined,{numeric:true})||pp(x,y)||x.i-y.i:(x,y)=>pp(x,y)||x.i-y.i);
+  return L}
+function tableData(){
+  const M=computeMaster(),L=masterView(M),a=mAss(),mock=M.mock,sj=M.inc.map(i=>M.subs[i]);
+  const P=v=>v==null?"":M.mock?v:ordn(v);
+  const head=["S/N","NAMES","CLASS",...sj,...(mock?["RAW","AGG","1'S","POS","CLASS POS"]:["TOTAL","POS","CLASS POS"])];
+  const body=L.map((x,k)=>[k+1,x.name.toUpperCase()||"(no name)",x.cls,...M.inc.map(i=>x.s[i]==null?"-":x.s[i]),
+    ...(mock?[x.ranked?x.raw:"",x.ranked?x.agg:"",x.ranked?x.ones:"",x.ranked?P(x.pos):"",x.ranked?P(x.cpos):""]:[x.ranked?x.total:"",x.ranked?P(x.pos):"",x.ranked?P(x.cpos):""])]);
+  return{M,L,head,body,a,sj,mock,ns:sj.length,title:`${SCHOOL}`,sub:`${a.name} – ${gl(MST.grade).toUpperCase()} MASTER SHEET`,term:a.term||"",
+    note:mock?`AGGREGATE = GRADES OF CORE SUBJECTS (${MSUB.slice(0,4).join(", ")}) + GRADES OF BEST TWO ELECTIVES (${MSUB.slice(4).filter((_,i)=>M.elig[i]).join(", ")}). POSITION IS IN THE WHOLE GRADE; CLASS POS IS IN THE LEARNER'S OWN CLASS.`:`TOTAL = SUM OF ${sj.join(", ")}. POSITION IS IN THE WHOLE GRADE; CLASS POS IS IN THE LEARNER'S OWN CLASS. AN EMPTY SCORE COUNTS AS 0.`+(MST.cls!=="all"?" (VIEW: ONE CLASS ONLY.)":"")}}
+function drawMaster(){
+  if(!$("ms_out")||!MST.loaded)return;const D=tableData(),M=D.M;
+  const cs=MST.teams.map(t=>{const n=((t.sheet&&t.sheet.rows)||[]).filter(r=>(r.n||"").trim()||(r.s||[]).some(x=>x!=null)).length;
+    return `<span class="subchip" title="${esc(t.u.name)}"><b>${esc(t.u.cls||t.u.name)}</b> ${n?n+" learner"+(n===1?"":"s"):"not started"}${t.sub?" · ✔ submitted":n?" · not submitted":""}</span>`}).join(" ");
+  const cur=MST.cls;$("ms_c").innerHTML='<option value="all">All classes</option>'+MST.teams.map(t=>`<option value="${t.u.uid}" ${t.u.uid===cur?"selected":""}>${esc(t.u.cls||t.u.name)}</option>`).join("");
+  if(cur!=="all"&&!MST.teams.some(t=>t.u.uid===cur)){MST.cls="all";$("ms_c").value="all"}
+  const ranked=M.rows.filter(x=>x.ranked).length;
+  $("ms_status").innerHTML=`<div class="card"><b>${gl(MST.grade)}</b> · ${MST.teams.length} class${MST.teams.length===1?"":"es"} · ${M.rows.length} learner${M.rows.length===1?"":"s"} (${ranked} ranked)<div class="chips" style="margin-top:8px">${cs||'<span class="sub">No active teacher has this grade and a class set. Add them under Teachers.</span>'}</div></div>`;
+  $("ms_subsum").textContent=M.mock?`· ${M.elig.filter(Boolean).length} electives count`:`· ${D.ns} of ${M.subs.length} counted`;
+  $("ms_chips").innerHTML=M.mock?`<h3>Electives that can count</h3><p class="sub">The best 2 of the ticked electives are added to the 4 core subjects, for every class in this grade.</p><div class="chips">${MSUB.slice(4).map((n,i)=>`<label><input type="checkbox" data-el="${i}" ${M.elig[i]?"checked":""}>${esc(n)}</label>`).join("")}</div>`
+    :`<h3>Subjects counted in the total</h3><p class="sub">Untick a subject that was not tested in every class. It is then left out of the total and the column is hidden.</p><div class="chips">${M.subs.map(n=>`<label><input type="checkbox" data-sj="${esc(n)}" ${MST.excl.includes(n)?"":"checked"}>${esc(n)}</label>`).join("")}</div>`;
+  const lastC=D.head.length;
+  $("ms_out").innerHTML=D.L.length?`<div class="card"><div class="wrap"><table><thead><tr>${D.head.map((h,i)=>`<th${i===1?' class="n"':""}>${esc(h)}</th>`).join("")}</tr></thead><tbody>${D.body.map((r,k)=>{const x=D.L[k];return `<tr>${r.map((v,i)=>{
+      const cl=i===1?"n":i>=lastC-(D.mock?5:3)?"r":i>=3&&D.mock&&x.cnt&&x.cnt.includes(D.M.inc[i-3])?"c":"";return `<td${cl?` class="${cl}"`:""}>${esc(v)}</td>`}).join("")}</tr>`}).join("")}</tbody></table></div>
+    <p class="leg">Positions are worked out across the whole grade, so they stay the same when you look at one class only. Learners with no scores yet are listed last without a position.${D.mock?" Shaded scores are the 2 best electives that count.":""}</p></div>`
+    :`<div class="card"><p class="sub">${MST.teams.length?"No learners have been entered for this assessment in this grade yet.":"Nothing to show yet."}</p></div>`}
+const mFile=(ext)=>((mAss().name+"_"+gl(MST.grade)+"_Master_Sheet").replace(/[^\w\- ]+/g,"").trim().replace(/\s+/g,"_"))+"."+ext;
+async function masterPdf(){
+  if(!MST.loaded)return;const D=tableData();if(!D.L.length)return mMsg("There are no learners to print yet.");
+  const fn=mFile("pdf");
+  if(window.api&&window.api.savePdf){
+    const h=`<!DOCTYPE html><html><head><meta charset="utf-8"><style>@page{size:A4 landscape;margin:8mm}body{font-family:Arial,sans-serif;margin:0;color:#111}h1{font-size:17px;text-align:center;margin:0}h2{font-size:13px;text-align:center;margin:3px 0}p.t{font-size:11px;text-align:center;margin:0 0 6px}table{width:100%;border-collapse:collapse;font-size:10px}th,td{border:.5px solid #555;padding:3px 2px;text-align:center}th{background:#1f3864;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}thead{display:table-header-group}tr{page-break-inside:avoid}td.n{text-align:left;white-space:nowrap}td.c{background:#e6f0ff;font-weight:bold;-webkit-print-color-adjust:exact;print-color-adjust:exact}.note{font-size:9px;margin-top:6px;color:#333}</style></head><body><h1>${esc(D.title)}</h1><h2>${esc(D.sub)}</h2>${D.term?`<p class="t">${esc(D.term)}</p>`:""}<table><thead><tr>${D.head.map((x,i)=>`<th>${esc(x)}</th>`).join("")}</tr></thead><tbody>${D.body.map((r,k)=>`<tr>${r.map((v,i)=>`<td class="${i===1?"n":D.mock&&i>=3&&D.L[k].cnt.includes(D.M.inc[i-3])?"c":""}">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table><div class="note">${esc(D.note)}</div></body></html>`;
+    try{const r=await window.api.savePdf(h,fn);mMsg(r.ok?"PDF saved: "+r.path:"Download cancelled.")}catch(e){mMsg("Could not create the PDF: "+e.message)}return}
+  if(!window.jspdf)return mMsg("PDF library did not load – check your connection and reload.");
+  const doc=new window.jspdf.jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
+  doc.setFont("helvetica","bold");doc.setFontSize(15);doc.text(D.title||"",148.5,11,{align:"center"});doc.setFontSize(11);doc.text(D.sub,148.5,17,{align:"center"});
+  doc.setFont("helvetica","normal");doc.setFontSize(9);if(D.term)doc.text(D.term,148.5,22,{align:"center"});
+  doc.autoTable({head:[D.head],body:D.body,startY:25,theme:"grid",margin:{left:7,right:7,bottom:12},
+    styles:{fontSize:8,cellPadding:1.5,halign:"center",valign:"middle",lineWidth:.1,lineColor:[120,120,120],textColor:20},
+    headStyles:{fillColor:[31,56,100],textColor:255},columnStyles:{1:{halign:"left",cellWidth:52}},
+    didParseCell:h=>{if(h.section==="body"&&D.mock&&h.column.index>=3&&D.L[h.row.index].cnt.includes(D.M.inc[h.column.index-3])){h.cell.styles.fillColor=[230,240,255];h.cell.styles.fontStyle="bold"}},
+    didDrawPage:h=>{doc.setFontSize(7);doc.setTextColor(60);doc.text(doc.splitTextToSize(D.note,280),7,doc.internal.pageSize.getHeight()-6)}});
+  doc.save(fn);mMsg("PDF downloaded.")}
+function masterCsv(){
+  if(!MST.loaded)return;const D=tableData();if(!D.L.length)return mMsg("There are no learners to export yet.");
+  const c=v=>{v=String(v==null?"":v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const text="\ufeff"+[D.head,...D.body].map(r=>r.map(c).join(",")).join("\r\n");
+  try{const a=document.createElement("a"),u=URL.createObjectURL(new Blob([text],{type:"text/csv"}));a.href=u;a.download=mFile("csv");document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);mMsg("Downloaded "+mFile("csv"))}
+  catch(e){mMsg("Couldn't save the file.")}}
+
+// ---------- backup, account ----------
+async function saveText(text,fn){
+ if(window.api&&window.api.saveFile){const r=await window.api.saveFile(text,fn);return r.ok?"Saved to "+r.path:"Cancelled."}
+ try{const a=document.createElement("a"),u=URL.createObjectURL(new Blob([text],{type:"application/json"}));a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);return "Downloaded "+fn}
+ catch(e){return "Couldn't save the file."}}
+async function exportAll(){
+ try{const out=[];for(const u of USERS){const sheets={};for(const a of ASSESS){const d=await db.doc(`users/${u.uid}/sheets/${a.id}`).get();if(d.exists)sheets[a.name]=d.data().data}
+  out.push({name:u.name,email:u.email,class:u.cls,grade:u.grade,sheets})}
+  return await saveText(JSON.stringify({app:"bece-cloud-export",exported:new Date().toISOString(),teachers:out}),"Score-sheets-"+new Date().toISOString().slice(0,10)+".json")}
+ catch(e){return "Couldn't export: "+authErr(e)}}
+function renderAcct(){
+ $("paneAcct").innerHTML=`<h1>My account</h1><p class="sub">${esc(me.name)} · ${esc(me.email)} · class ${esc(me.cls||"not set")} · ${esc(gradeLabel(me.grade))}. Ask the administrator to change your class or grade.</p>
+ <div class="card auth" style="margin:0"><b>Change password</b><label>Current password</label>${pw("a_old","current-password")}<label>New password (at least 6 characters)</label>${pw("a_new","new-password")}<label>Confirm new password</label>${pw("a_new2","new-password")}
+ <p class="err" id="a_msg"></p><button class="p" id="a_go">Change password</button></div>`;
+ $("a_go").onclick=async()=>{const m=(t,ok)=>{$("a_msg").textContent=t;$("a_msg").style.color=ok?"var(--ok,#0a7a3d)":""},p=$("a_new").value;
+  if(p.length<6)return m("Password must be at least 6 characters.");if(p!==$("a_new2").value)return m("The passwords don't match.");
+  try{const u=auth.currentUser;await u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(me.email,$("a_old").value));await u.updatePassword(p);m("Password changed.",true)}
+  catch(e){m(authErr(e))}}}
+$("m_acct").onclick=()=>showPage("acct");
+$("signout").onclick=async()=>{await flush();stopWatch();me=null;viewing=null;window.viewOnly=false;try{await auth.signOut()}catch(e){}showSignin()};
+$("authPane").onclick=eye;$("paneAcct").onclick=eye;
+boot();
+})();
+</script>
+<script>
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll("details.pop[open],details.umenu[open]").forEach(d=>{d.open=false})});
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+ document.querySelectorAll("details.pop[open],details.umenu[open]").forEach(d=>{if(!d.contains(t))d.open=false});
+ const o=t.closest("[data-open]");if(o){const d=document.getElementById(o.dataset.open);if(d&&d.showModal&&!d.open){const m=d.querySelector(".dmsg");if(m)m.textContent="";d.showModal()}return}
+ if(t.closest("[data-close]")){const d=t.closest("dialog");if(d)d.close();return}
+ if(t.tagName==="DIALOG"&&t.classList.contains("dlg")){const r=t.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)t.close()}});
+</script>
+<script>if("serviceWorker"in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(function(){});</script></main></body></html>

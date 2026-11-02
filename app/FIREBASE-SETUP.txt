@@ -1,0 +1,70 @@
+LEARNER SCORE MASTER SHEET - FIREBASE SETUP  (about 15 minutes, done once by the administrator)
+===================================================================
+You need a Google account and the internet. The free "Spark" plan is enough.
+
+1. Create the project
+   - Go to https://console.firebase.google.com and click "Create a project".
+   - Give it a name (for example santa-mariel-scores). Google Analytics is not needed.
+
+2. Turn on sign-in
+   - Left menu: Build > Authentication > Get started > Sign-in method.
+   - Choose "Email/Password", switch on the FIRST toggle (Email/Password), Save.
+
+3. Create the database
+   - Left menu: Build > Firestore Database > Create database.
+   - Pick the location nearest to you (it cannot be changed later).
+   - Choose "Start in production mode", then Create.
+
+4. Add the security rules  (this is what keeps each teacher's data private)
+   - In Firestore, open the "Rules" tab.
+   - Delete everything in the box, paste the whole content of the file
+     "firestore.rules" from this folder, and click Publish.
+   - If you published an earlier version of the rules, paste these NEW rules over
+     them. The old rules do not know about assessments.
+
+5. Get your project settings
+   - Click the gear icon > Project settings > General.
+   - Under "Your apps" click the web icon  </>  , type any nickname, click Register app.
+     (Do NOT tick "Firebase Hosting".)
+   - You will see a block of code with apiKey, authDomain, projectId, storageBucket,
+     messagingSenderId and appId. Copy those values.
+
+6. Put them in the app
+   - Open "firebase-config.js" in this folder with Notepad.
+   - Paste each value between the quote marks, save the file.
+   - These values are not secrets; the rules in step 4 protect the data.
+
+7. Start the app
+   - In Command Prompt, inside this folder:   npm start
+   - The first screen creates the ADMINISTRATOR (use a real email address).
+   - Open "Assessments" and click "Add Class Test 1, 2, 3 and a Mock Exam" (type the term
+     first). You can also create any other assessment yourself.
+   - Open "Teachers" and add each class teacher with their email, a starting password,
+     class and grade. The grade decides which assessments they can open.
+
+8. Make the copy for other computers
+   - npm run build     (copy the whole dist\win-unpacked folder to each computer)
+   - Every computer needs internet. Teachers sign in with their email and password and
+     see the same data on any computer.
+
+NOTES
+ - Forgotten password: click "Forgot password" on the sign-in screen (a reset email is
+   sent), or the administrator clicks "Reset password" next to the teacher.
+ - "Deactivate" stops a teacher signing in but keeps their data.
+ - Only the administrator can read other teachers' sheets (Teachers > View sheets, or click
+   a cell in Overview). Read-only.
+ - The administrator creates every class test and mock exam under "Assessments". A class
+   test adds the scores into a total and position. A mock exam uses the BECE aggregate.
+   Each assessment is "open to" a range of grades (mocks default to Grade 9 only), and can be
+   Open, Closed (teachers can only look) or Archived (hidden).
+ - Subjects: when you create a class test, the "Subjects" box lists its subjects (type or
+   click "Add subject"). Tick "Teachers can't change the subjects" to make the list final.
+ - Submitting: when a teacher finishes a master sheet they click "Submit to administrator".
+   The administrator gets a pop-up (and a desktop alert if enabled) while the app is open,
+   and a red number on "Notifications". Anything submitted while the app was closed is listed
+   under Notifications the next time you sign in. (E-mail alerts would need a paid Firebase
+   feature, so they are not included.)
+ - When you update the app, paste the latest firestore.rules again (Firestore > Rules > Publish).
+ - Changes are saved to the cloud about a second after you stop typing. Watch the
+   "Saved to the cloud" note at the top; wait for it before closing the app.
+ - Two people signing in as the same teacher at the same time can overwrite each other.

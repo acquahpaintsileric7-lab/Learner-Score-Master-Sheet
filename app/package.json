@@ -1,0 +1,42 @@
+{
+  "name": "learner-score-master-sheet",
+  "productName": "Learner Score Master Sheet",
+  "version": "1.0.0",
+  "description": "Learner score master sheets: class tests and mock exams with live ranking and PDF export",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "build:mac": "electron-builder --mac"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "rcedit": "^3.1.0"
+  },
+  "build": {
+    "appId": "com.santamariel.learnerscoremastersheet",
+    "productName": "Learner Score Master Sheet",
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "firebase-config.js",
+      "icon.png",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false,
+      "icon": "build/icon.ico"
+    },
+    "copyright": "Copyright © Eric",
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.png",
+      "category": "public.app-category.education"
+    },
+    "afterPack": "afterPack.js"
+  },
+  "author": "Eric"
+}

@@ -1,0 +1,41 @@
+LEARNER SCORE MASTER SHEET: PUT THE APP ON SMARTPHONES, TABLETS AND ANY COMPUTER  (Firebase Hosting)
+=========================================================================
+Do FIREBASE-SETUP.txt first (project, sign-in, database, rules). Then:
+
+1. Fill in the settings
+   - Open  public\firebase-config.js  with Notepad and paste the same values you used
+     for the desktop app. Save.
+
+2. Install the Firebase tools (once)
+   - In Command Prompt:   npm install -g firebase-tools
+   - Then:                firebase login        (sign in with the same Google account)
+
+3. Connect this folder to your project
+   - Command Prompt, inside this "web" folder (the one containing firebase.json):
+         firebase use --add
+     Choose your project, type  default  as the alias.
+
+4. Publish
+         firebase deploy
+   - When it finishes it prints a "Hosting URL" like  https://your-project.web.app
+   - That is the address teachers use. (This also republishes firestore.rules.)
+
+5. On a phone or tablet
+   - Android (Chrome): open the address, tap the menu (three dots) > "Install app"
+     or "Add to Home screen".
+   - iPhone / iPad (Safari): open the address, tap Share > "Add to Home Screen".
+   - After that it opens from the home screen like an app. Teachers sign in with the
+     email and password the administrator gave them.
+
+6. Updating later
+   - Replace public\index.html with the new one, then run:  firebase deploy --only hosting
+
+NOTES
+ - Needs internet; there is no offline mode.
+ - The address is public, but nobody sees any data without signing in. The Firestore
+   rules protect each teacher's sheets.
+ - Tick "Keep me signed in on this device" on the sign-in screen for a personal phone.
+   Leave it unticked on a shared computer.
+ - On a phone the score table is wide: swipe sideways to see all subjects. Entering
+   scores is easiest on a tablet or computer. "PDF text" and "Screen text" buttons help.
+ - The PDF downloads to the phone's Downloads folder / opens in the browser.

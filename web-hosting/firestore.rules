@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function profile(uid) { return get(/databases/$(database)/documents/users/$(uid)).data; }
+    function hasProfile(uid) { return exists(/databases/$(database)/documents/users/$(uid)); }
+    function isActive() {
+      return signedIn() && hasProfile(request.auth.uid) && profile(request.auth.uid).active == true;
+    }
+    function isAdmin() {
+      return isActive() && profile(request.auth.uid).role == 'admin';
+    }
+
+    // Is the signed-in teacher's grade inside the assessment's "open to" range?
+    function gradeAllowed(a) {
+      let g = profile(request.auth.uid).grade;
+      return (a.minGrade <= 0 && a.maxGrade >= 9)
+        || (g == 'KG' && a.minGrade <= 0)
+        || (g in ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+            && int(g) >= a.minGrade && int(g) <= a.maxGrade);
+    }
+    function canEditSheet(aid) {
+      let a = get(/databases/$(database)/documents/assessments/$(aid)).data;
+      return isAdmin() || (a.status == 'open' && gradeAllowed(a));
+    }
+
+    // Marker that the first administrator has been created.
+    match /config/setup {
+      allow get: if true;
+      allow create: if signedIn() && !exists(/databases/$(database)/documents/config/setup);
+      allow update, delete: if false;
+    }
+
+    // One profile per signed-in person.
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      // The administrator adds teachers. The very first administrator may create
+      // their own profile only in the same batch that creates config/setup.
+      allow create: if isAdmin()
+        || (request.auth.uid == uid
+            && request.resource.data.role == 'admin'
+            && !exists(/databases/$(database)/documents/config/setup)
+            && existsAfter(/databases/$(database)/documents/config/setup));
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // Class tests, mock exams and anything else the administrator creates.
+    match /assessments/{aid} {
+      allow read: if isActive();
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Each teacher's sheet for each assessment (document id = assessment id).
+    match /users/{uid}/sheets/{aid} {
+      allow get, list: if signedIn() && ((request.auth.uid == uid && isActive()) || isAdmin());
+      allow create, update: if signedIn() && request.auth.uid == uid && isActive()
+        && exists(/databases/$(database)/documents/assessments/$(aid))
+        && canEditSheet(aid);
+      // Only the administrator can remove a sheet (used when an assessment is deleted).
+      allow delete: if signedIn() && isAdmin();
+    }
+
+    // Small "who has entered what" records used by the administrator's overview.
+    match /summaries/{sid} {
+      // A teacher can read their own record (to show "Submitted"); the administrator reads all.
+      allow get: if isActive() && (isAdmin() || sid.matches(request.auth.uid + '__.*'));
+      allow list: if isAdmin();
+      allow create, update: if isActive()
+        && request.resource.data.uid == request.auth.uid
+        && sid == request.auth.uid + '__' + request.resource.data.aid;
+      allow delete: if isAdmin();
+    }
+  }
+}
